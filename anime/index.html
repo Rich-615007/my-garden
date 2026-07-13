@@ -252,7 +252,7 @@ function renderCards() {
        <div class="anime-meta">
          <span class="anime-title">${a.titleCN}</span>
          <div class="anime-sub">
-           <span>${a.year}</span><span>${a.genres[0]}</span>
+           <span>${a.year}</span><span>${a.genres[0]}</span><span>${a.studio}</span>
          </div>
        </div>`;
     card.addEventListener('click', () => openModal(a));
@@ -266,6 +266,7 @@ function openModal(a) {
   document.getElementById('modalMeta').innerHTML =
     `<span>📅 ${a.year}</span>
      <span>📺 ${a.episodes} 集</span>
+     <span>🏢 ${a.studio}</span>
      <span class="modal-score">⭐ ${a.score}</span>
      <span>${a.genres.join(' · ')}</span>`;
   document.getElementById('modalSynopsis').textContent = a.synopsis;
