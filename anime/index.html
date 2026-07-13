@@ -7,111 +7,63 @@
 <link rel="stylesheet" href="../style.css">
 <style>
 /* ══════════ 追番页专属 ══════════ */
-.anime-grid {
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:16px;
-}
-.anime-card {
-  display:flex; gap:14px;
-  padding:14px; border-radius:var(--radius);
-  background:var(--card);
-  border:1px solid var(--border);
-  cursor:pointer;
-  transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
-}
-.anime-card:hover {
-  transform:translateY(-2px);
-  box-shadow:0 4px 18px rgba(120,90,60,0.12);
-  background:rgba(255,248,236,0.9);
-}
-.anime-cover {
-  width:64px; height:90px; border-radius:3px; flex-shrink:0;
-  object-fit:cover;
-  background:linear-gradient(140deg, #EEE0D0, #DDD0BB);
-}
-.anime-cover--placeholder {
-  display:flex; align-items:center; justify-content:center;
-  font-size:2rem; color:#C0B090;
-}
-.anime-meta {
-  display:flex; flex-direction:column; gap:4px; min-width:0;
-  justify-content:center;
-}
-.anime-title {
-  font-size:0.9rem; font-weight:600; color:var(--text);
-  line-height:1.3;
-  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
-  overflow:hidden;
-}
-.anime-sub {
-  font-size:0.76rem; color:var(--soft);
-  display:flex; gap:8px; flex-wrap:wrap;
-}
-.anime-sub span {
-  background:rgba(200,160,110,0.12);
-  padding:2px 8px; border-radius:3px;
-}
+.anime-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; }
 
-/* ══════════ 弹窗 ══════════ */
+.anime-card {
+  display:flex; gap:14px; padding:14px; border-radius:var(--radius);
+  background:var(--card); border:1px solid var(--border);
+  cursor:pointer; transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.anime-card:hover { transform:translateY(-2px); box-shadow:0 4px 18px rgba(120,90,60,0.12); background:rgba(255,248,236,0.9); }
+.anime-cover { width:64px; height:90px; border-radius:3px; flex-shrink:0; object-fit:cover; background:linear-gradient(140deg, #EEE0D0, #DDD0BB); }
+.anime-meta { display:flex; flex-direction:column; gap:4px; min-width:0; justify-content:center; }
+.anime-title { font-size:0.9rem; font-weight:600; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.anime-sub { font-size:0.74rem; color:var(--soft); display:flex; gap:6px; flex-wrap:wrap; }
+.anime-sub span { background:rgba(200,160,110,0.12); padding:2px 6px; border-radius:3px; }
+.anime-sub .studio-change { background:rgba(220,150,80,0.18); color:#B06030; font-weight:600; }
+
+/* 制作社分区标题 */
+.studio-section { margin-bottom:28px; }
+.studio-head {
+  font-size:1rem; font-weight:700; color:var(--brown);
+  padding:8px 0 6px; margin-bottom:12px;
+  border-bottom:2px solid rgba(180,150,120,0.25);
+  letter-spacing:0.04em;
+}
+.studio-head small { font-weight:400; font-size:0.78rem; color:var(--soft); margin-left:8px; }
+
+/* 弹窗 */
 .modal-overlay {
   position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(40,25,10,0.55);
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
-  z-index:200;
+  background:rgba(40,25,10,0.55); backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px); z-index:200;
   display:flex; align-items:center; justify-content:center;
-  opacity:0; visibility:hidden;
-  transition:opacity 0.25s, visibility 0.25s;
+  opacity:0; visibility:hidden; transition:opacity 0.25s, visibility 0.25s;
 }
-.modal-overlay.active {
-  opacity:1; visibility:visible;
-}
+.modal-overlay.active { opacity:1; visibility:visible; }
 .modal-box {
-  background:rgba(255,252,246,0.96);
-  border-radius:8px;
-  max-width:620px; width:92%;
-  max-height:82vh;
-  overflow-y:auto;
+  background:rgba(255,252,246,0.96); border-radius:8px;
+  max-width:620px; width:92%; max-height:82vh; overflow-y:auto;
   box-shadow:0 8px 40px rgba(60,30,10,0.25);
-  display:flex; gap:20px;
-  padding:24px;
-  position:relative;
-  transform:translateY(12px);
-  transition:transform 0.25s;
+  display:flex; gap:20px; padding:24px; position:relative;
+  transform:translateY(12px); transition:transform 0.25s;
 }
-.modal-overlay.active .modal-box {
-  transform:translateY(0);
-}
+.modal-overlay.active .modal-box { transform:translateY(0); }
 .modal-close {
-  position:absolute; top:12px; right:16px;
-  width:28px; height:28px;
-  border:none; background:none;
-  font-size:1.2rem; color:var(--soft);
-  cursor:pointer; border-radius:4px;
-  display:flex; align-items:center; justify-content:center;
+  position:absolute; top:12px; right:16px; width:28px; height:28px;
+  border:none; background:none; font-size:1.2rem; color:var(--soft);
+  cursor:pointer; border-radius:4px; display:flex; align-items:center; justify-content:center;
   transition:background 0.2s, color 0.2s;
 }
 .modal-close:hover { background:rgba(180,140,100,0.12); color:var(--text); }
-.modal-cover-big {
-  width:140px; height:196px; border-radius:4px;
-  object-fit:cover; flex-shrink:0;
-  background:linear-gradient(140deg, #EEE0D0, #DDD0BB);
-}
+.modal-cover-big { width:140px; height:196px; border-radius:4px; object-fit:cover; flex-shrink:0; background:linear-gradient(140deg, #EEE0D0, #DDD0BB); }
 .modal-info { display:flex; flex-direction:column; gap:10px; min-width:0; }
 .modal-title { font-size:1.2rem; font-weight:700; color:var(--brown); line-height:1.3; }
-.modal-meta-row {
-  display:flex; gap:12px; flex-wrap:wrap;
-  font-size:0.82rem; color:var(--soft);
-}
-.modal-meta-row span {
-  background:rgba(200,160,110,0.1);
-  padding:2px 8px; border-radius:3px;
-}
+.modal-meta-row { display:flex; gap:10px; flex-wrap:wrap; font-size:0.82rem; color:var(--soft); }
+.modal-meta-row span { background:rgba(200,160,110,0.1); padding:2px 8px; border-radius:3px; }
 .modal-score { font-weight:700; color:var(--accent); }
-.modal-synopsis {
-  font-size:0.85rem; color:var(--text); line-height:1.8;
-}
+.modal-synopsis { font-size:0.85rem; color:var(--text); line-height:1.8; }
+.modal-studio-note { font-size:0.82rem; color:#B06030; background:rgba(220,150,80,0.1); padding:6px 10px; border-radius:4px; }
 
 @media (max-width:750px) {
   .anime-grid { grid-template-columns:1fr; }
@@ -129,7 +81,7 @@
   <div class="field-hill field-hill--near"></div>
 </div>
 <div class="field-flowers" aria-hidden="true">
-  <span class="field-flower" style="left:8%;bottom:16%;animation-delay:0s;"></span>
+  <span class="field-flower" style="left:8%;bottom:16%;"></span>
   <span class="field-flower" style="left:20%;bottom:13%;animation-delay:0.5s;"></span>
   <span class="field-flower" style="left:35%;bottom:15%;animation-delay:1s;"></span>
   <span class="field-flower" style="left:50%;bottom:14%;animation-delay:1.5s;"></span>
@@ -152,19 +104,16 @@
 <section class="subpage">
   <div class="subpage-header">
     <h1 class="subpage-title">📺 追番</h1>
-    <p class="subpage-desc">每一部动画，都是一段被认真对待的时光。</p>
+    <p class="subpage-desc">按制作社分类 · 同系列相邻 · 从初版开始排列</p>
   </div>
 
-  <div class="anime-grid" id="animeGrid">
-    <!-- JS 动态填充 -->
-  </div>
+  <div id="animeRoot"></div>
 </section>
 
 <footer class="footer">
   <p>揉碎星辰 · 永远在建，永远未完成。</p>
 </footer>
 
-<!-- 弹窗 -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <button class="modal-close" id="modalClose">&times;</button>
@@ -172,110 +121,124 @@
     <div class="modal-info">
       <h2 class="modal-title" id="modalTitle"></h2>
       <div class="modal-meta-row" id="modalMeta"></div>
+      <div class="modal-studio-note" id="modalStudioNote" style="display:none;"></div>
       <p class="modal-synopsis" id="modalSynopsis"></p>
     </div>
   </div>
 </div>
 
 <script>
-// ══════════ 番剧数据库 ══════════
-// 添加新番: 复制一条, 改 id/title/titleCN/year/episodes/score/genres/cover/synopsis
-const animeData = [
-  {
-    id: 4181,
-    title: 'Clannad: After Story',
-    titleCN: 'CLANNAD ～AFTER STORY～',
-    year: 2008, episodes: 24, score: 8.93,
-    studio: 'Kyoto Animation',
-    genres: ['剧情','恋爱','校园','催泪'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',
-    synopsis: '冈崎朋也和古河渚从高中毕业后，一起经历了成长的酸甜苦辣。朋也在迷茫中学会工作的意义，而渚始终陪伴在他身边。当生活的重量压来时，他们发现彼此是唯一的光。第二季深入探讨家庭、失去与传承——这是一部关于"人生"本身的作品。'
-  },
-  {
-    id: 52991,
-    title: 'Sousou no Frieren',
-    titleCN: '葬送的芙莉莲',
-    year: 2023, episodes: 28, score: 9.32,
-    studio: 'Madhouse',
-    genres: ['冒险','奇幻','剧情','治愈'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1015/138006l.jpg',
-    synopsis: '打倒魔王后，勇者队伍解散。精灵魔法使芙莉莲拥有漫长的寿命，她独自踏上旅途，重新走过与勇者一行人曾走过的路。在旅途中，她逐渐理解了那些短暂生命里蕴含的意义——那些她当时没能理解的感情，如今从记忆中缓缓浮现。'
-  },
-  {
-    id: 9253,
-    title: 'Steins;Gate',
-    titleCN: '命运石之门',
-    year: 2011, episodes: 24, score: 9.07,
-    studio: 'White Fox',
-    genres: ['科幻','悬疑','剧情','时间旅行'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1935/127974l.jpg',
-    synopsis: '自称疯狂科学家的冈部伦太郎，在偶然间发明了可以向过去发送邮件的时间机器。随着对时间线的干涉，他们发现每一次改变都会引发无法预料的连锁反应。为了拯救挚爱的人，冈部必须与命运本身抗争——一次又一次。'
-  },
-  {
-    id: 23273,
-    title: 'Shigatsu wa Kimi no Uso',
-    titleCN: '四月是你的谎言',
-    year: 2014, episodes: 22, score: 8.64,
-    studio: 'A-1 Pictures',
-    genres: ['音乐','恋爱','校园','催泪'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1405/143284l.jpg',
-    synopsis: '天才钢琴少年有马公生，在母亲去世后失去了聆听钢琴声的能力。直到那个春天，小提琴手宫园薰闯入了他的生活。她用自由奔放的演奏方式告诉公生：音乐不是为了完美，是为了传达。而她的时间，却只剩下最后一个春天。'
-  },
-  {
-    id: 33352,
-    title: 'Violet Evergarden',
-    titleCN: '紫罗兰永恒花园',
-    year: 2018, episodes: 13, score: 8.67,
-    studio: 'Kyoto Animation',
-    genres: ['剧情','奇幻','治愈','催泪'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1795/95088l.jpg',
-    synopsis: '战争结束，曾是"武器"的少女薇尔莉特失去了双臂和最重要的人。换上义肢的她成为了"自动手记人偶"——替不识字的人代笔写信。在为他人的思念落笔的过程中，她开始理解少佐最后对她说的话——「我爱你」究竟是什么意思。'
-  },
-  {
-    id: 6547,
-    title: 'Angel Beats!',
-    titleCN: '天使的心跳',
-    year: 2010, episodes: 13, score: 7.88,
-    studio: 'P.A. Works',
-    genres: ['奇幻','战斗','校园','催泪'],
-    cover: 'https://cdn.myanimelist.net/images/anime/1244/111115l.jpg',
-    synopsis: '音无结弦在死后世界的校园里醒来，失去了生前的记忆。他加入了"死后世界战线"——一群与"天使"对抗的少年少女。他们拒绝消失，拒绝接受生前未能实现的遗憾。但随着音无逐渐找回记忆，真相浮出水面——这个世界的真正目的，是让人学会告别。'
-  }
+/* ══════════ 番剧数据库 ══════════
+   排序规则:
+   1. 按制作社分类（以第一季制作社为准）
+   2. 同系列相邻，从第一季/最早版本开始排列
+   3. 中途换社用 studioChange 标注
+   4. 添加新番: 复制一条, 填入数据
+   ═══════════════════════════════ */
+
+const animeDB = [
+  /* ── Kyoto Animation ── */
+  { id:101,  cn:'AIR',              year:2005, eps:12, sc:7.27, s:'Kyoto Animation', gn:['剧情','奇幻','恋爱'], cv:'https://cdn.myanimelist.net/images/anime/8/22069l.jpg', sp:'一个能操纵人偶的少年国崎往人，来到海边小镇寻找"天空中的少女"。他遇到了天真烂漫的女孩神尾观铃。夏日、蝉鸣、海风——这趟旅程的终点，藏着一段跨越千年的约定。'},
+  { id:1530, cn:'Kanon',            year:2006, eps:24, sc:7.93, s:'Kyoto Animation', gn:['剧情','恋爱','治愈'], cv:'https://cdn.myanimelist.net/images/anime/4/27717l.jpg', sp:'相泽佑一在七年后的冬天回到了北方小镇。雪中的街道、熟悉的风景，和那些等待着他的少女们。随着冬天的深入，那些被遗忘的记忆逐渐苏醒——这不仅仅是一个冬天的故事，而是关于"约定"的故事。'},
+  { id:2167, cn:'CLANNAD',          year:2007, eps:23, sc:8.03, s:'Kyoto Animation', gn:['剧情','恋爱','校园'], cv:'https://cdn.myanimelist.net/images/anime/1787/121330l.jpg', sp:'冈崎朋也在通往学校的樱花坡道上遇到了古河渚。她独自站在坡道下，轻声说着"红豆面包"。从那天起，朋也灰色的人生开始染上色彩。学校、友情、爱情、家庭——这是一个关于成长的故事，而故事的核心，是"家族"。'},
+  { id:4181, cn:'CLANNAD ～AFTER STORY～', year:2008,eps:24,sc:8.93,s:'Kyoto Animation',gn:['剧情','恋爱','校园','催泪'],cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',sp:'朋也和渚从高中毕业，一起经历了成长的酸甜苦辣。朋也在迷茫中找到工作的意义，渚始终陪伴在身旁。当生活的重量真正压来时，他们发现彼此是唯一的光。第二季深入探讨家庭、失去与传承——这是一部关于"人生"本身的作品。'},
+
+  { id:27989,cn:'吹响吧！上低音号', year:2015,eps:13,sc:8.03,s:'Kyoto Animation',gn:['音乐','校园','剧情'],cv:'https://cdn.myanimelist.net/images/anime/6/75113l.jpg',sp:'黄前久美子进入北宇治高中，犹豫中加入了吹奏乐部。本以为会是轻松的社团活动，却遇上了严格的新顾问泷升老师。"目标是全国大赛"——这句话改变了所有人。青春、汗水、不甘——以及那支上低音号奏出的音色。'},
+  { id:32867,cn:'吹响吧！上低音号 2',year:2016,eps:13,sc:8.18,s:'Kyoto Animation',gn:['音乐','校园','剧情'],cv:'https://cdn.myanimelist.net/images/anime/12/83737l.jpg',sp:'全国大赛结束后，北宇治吹奏乐部迎来新的挑战。希美学姐的心结、明日香学姐的过去——久美子开始了解到身边人的故事。音乐不仅是演奏，更是人与人的连结。'},
+  { id:35615,cn:'莉兹与青鸟',       year:2018,eps:1, sc:8.19,s:'Kyoto Animation',gn:['音乐','校园','剧情'],cv:'https://cdn.myanimelist.net/images/anime/1630/97383l.jpg',sp:'以铠冢霙和伞木希美为主角的剧场版。童话《莉兹与青鸟》与两人的关系相互呼应。霙的双簧管、希美的长笛——分离的悲伤，终要面对的告白。'},
+  { id:37860,cn:'吹响吧！上低音号 ～誓言的终章～',year:2019,eps:1,sc:8.01,s:'Kyoto Animation',gn:['音乐','校园','剧情'],cv:'https://cdn.myanimelist.net/images/anime/1517/100633l.jpg',sp:'久美子升入高二，迎来新入部的一年级生。作为前辈的她，开始承担引导后辈的责任。新成员的加入带来新的摩擦，但目标仍然是全国金奖。'},
+  { id:54309,cn:'吹响吧！上低音号 3',year:2024,eps:13,sc:8.65,s:'Kyoto Animation',gn:['音乐','校园','剧情'],cv:'https://cdn.myanimelist.net/images/anime/1571/141518l.jpg',sp:'久美子升入高三，最后的全国大赛。三年级的夏天，意味着告别。为了不留遗憾，为了所有前辈和后辈——北宇治吹奏乐部的最后一次冲刺。'},
+
+  { id:33352,cn:'紫罗兰永恒花园',   year:2018,eps:13,sc:8.67,s:'Kyoto Animation',gn:['剧情','奇幻','治愈'],cv:'https://cdn.myanimelist.net/images/anime/1795/95088l.jpg',sp:'战争结束，曾是"武器"的少女薇尔莉特失去了双臂和最重要的人。换上义肢的她成为了"自动手记人偶"——为他人代笔写信。在落笔中，她开始理解"我爱你"的含义。'},
+
+  /* ── Bones ── */
+  { id:121,  cn:'钢之炼金术师 (2003)',year:2003,eps:51,sc:8.12,s:'Bones',gn:['动作','冒险','剧情','奇幻'],cv:'https://cdn.myanimelist.net/images/anime/10/75119l.jpg',sp:'爱德华和阿尔冯斯·艾尔利克兄弟，为了复活死去的母亲进行了禁忌的人体炼成。代价是爱德华失去左腿和右臂，阿尔冯斯失去整个身体。为了找回失去的一切，他们踏上了寻找贤者之石的旅途。2003年版为动画原创结局，与漫画走向不同。'},
+  { id:5114, cn:'钢之炼金术师 FULLMETAL ALCHEMIST',year:2009,eps:64,sc:9.11,s:'Bones',gn:['动作','冒险','剧情','奇幻'],cv:'https://cdn.myanimelist.net/images/anime/1223/96541l.jpg',sp:'完全忠实于原作漫画的改编版本。同样的起点，截然不同的展开与结局。等价交换是世界的铁则——兄弟二人在这条法则下挣扎、成长、失去、再获得。无数人心中的满分神作。'},
+
+  /* ── Madhouse ── */
+  { id:52991,cn:'葬送的芙莉莲',     year:2023,eps:28,sc:9.32,s:'Madhouse',gn:['冒险','奇幻','剧情','治愈'],cv:'https://cdn.myanimelist.net/images/anime/1015/138006l.jpg',sp:'打倒魔王后，勇者队伍解散。精灵芙莉莲拥有漫长的寿命，她独自重走与勇者一行人走过的路。旅途中，她逐渐理解了那些短暂生命里蕴含的意义——那些当时没懂的感情，从记忆中浮现。'},
+
+  /* ── White Fox ── */
+  { id:9253, cn:'命运石之门',       year:2011,eps:24,sc:9.07,s:'White Fox',gn:['科幻','悬疑','剧情'],cv:'https://cdn.myanimelist.net/images/anime/1935/127974l.jpg',sp:'自称疯狂科学家的冈部伦太郎，偶然发明了向过去发送邮件的时间机器。每一次对时间线的干涉，都引发无法预料的连锁反应。为了拯救挚爱之人，冈部必须与命运本身抗争。'},
+
+  /* ── A-1 Pictures ── */
+  { id:23273,cn:'四月是你的谎言',   year:2014,eps:22,sc:8.64,s:'A-1 Pictures',gn:['音乐','恋爱','校园'],cv:'https://cdn.myanimelist.net/images/anime/1405/143284l.jpg',sp:'天才钢琴少年有马公生，在母亲去世后失去了聆听钢琴的能力。直到那个春天——小提琴手宫园薰闯入了他的生活。她用自由奔放的演奏告诉公生：音乐不是为了完美，是为了传达。'},
+
+  /* ── Gonzo → Kyoto Animation → Xebec (制作社变动系列) ── */
+  { id:71,   cn:'全金属狂潮！',      year:2002,eps:24,sc:7.59,s:'Gonzo',gn:['动作','科幻','喜剧'],cv:'https://cdn.myanimelist.net/images/anime/2/20317l.jpg',sp:'相良宗介——一名少年兵，被派去伪装成高中生保护少女千鸟要。但他除了战斗什么都不会，校园生活变成了一场灾难。搞笑与严肃并存的军武校园物语。'},
+  { id:72,   cn:'全金属狂潮？Fumoffu',year:2003,eps:12,sc:7.89,s:'Kyoto Animation',gn:['喜剧','校园','动作'],cv:'https://cdn.myanimelist.net/images/anime/4/75260l.jpg',sp:'',studioChange:'※ 制作社变动：Gonzo → Kyoto Animation。本季以校园喜剧为主，宗介的军事脑在和平校园中持续制造笑料。'},
+  { id:73,   cn:'全金属狂潮！TSR',  year:2005,eps:13,sc:7.91,s:'Kyoto Animation',gn:['动作','科幻','剧情'],cv:'https://cdn.myanimelist.net/images/anime/11/75286l.jpg',sp:'The Second Raid——回归严肃主线。宗介和要面临真正的危机。战场与日常的界限开始模糊，两人的关系也在战火中发生微妙的变化。'},
+  { id:30413,cn:'全金属狂潮！IV',   year:2018,eps:12,sc:7.52,s:'Xebec',gn:['动作','科幻','剧情'],cv:'https://cdn.myanimelist.net/images/anime/1399/90898l.jpg',sp:'',studioChange:'※ 制作社变动：Kyoto Animation → Xebec。Invisible Victory——系列最终章。宗介独自踏上最后的战场。'},
+
+  /* ── P.A. Works ── */
+  { id:6547, cn:'Angel Beats!',      year:2010,eps:13,sc:7.88,s:'P.A. Works',gn:['奇幻','战斗','校园'],cv:'https://cdn.myanimelist.net/images/anime/1244/111115l.jpg',sp:'音无结弦在死后世界的校园里醒来。他加入了与"天使"对抗的"死后世界战线"——一群拒绝消失的少年少女。随着记忆逐渐找回，真相浮出水面：这个世界的真正目的，是让人学会告别。'},
 ];
 
-// ══════════ 渲染 ══════════
-const grid = document.getElementById('animeGrid');
+/* ══════════ 按制作社分组 ══════════ */
+const studioOrder = ['Kyoto Animation','Bones','Madhouse','White Fox','A-1 Pictures','Gonzo','P.A. Works'];
+const groups = {};
+animeDB.forEach(a => {
+  // 以第一季制作社为分组依据（同系列第一条的 studio）
+  if (!groups[a.s]) groups[a.s] = [];
+  groups[a.s].push(a);
+});
+
+/* ══════════ 渲染 ══════════ */
+const root = document.getElementById('animeRoot');
 const overlay = document.getElementById('modalOverlay');
 
-function renderCards() {
-  animeData.forEach(a => {
+studioOrder.forEach(studio => {
+  const items = groups[studio];
+  if (!items || items.length === 0) return;
+
+  const sec = document.createElement('div');
+  sec.className = 'studio-section';
+  sec.innerHTML = `<div class="studio-head">🎬 ${studio}<small>${items.length} 部</small></div>
+    <div class="anime-grid" id="grid-${studio.replace(/\s/g,'')}"></div>`;
+  root.appendChild(sec);
+
+  const grid = sec.querySelector('.anime-grid');
+  items.forEach(a => {
     const card = document.createElement('div');
     card.className = 'anime-card';
+
+    let subHTML = `<span>${a.year}</span><span>${a.gn[0]}</span>`;
+    if (a.studioChange) {
+      subHTML += `<span class="studio-change">换社</span>`;
+    } else if (a.s !== studio) {
+      subHTML += `<span class="studio-change">${a.s}</span>`;
+    } else {
+      subHTML += `<span>${a.s}</span>`;
+    }
+
     card.innerHTML =
-      `<img class="anime-cover" src="${a.cover}" alt="${a.titleCN}" loading="lazy"
-           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-       <div class="anime-cover anime-cover--placeholder" style="display:none;">🎬</div>
+      `<img class="anime-cover" src="${a.cv}" alt="${a.cn}" loading="lazy"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2290%22><rect fill=%22%23E8D5B8%22 width=%2264%22 height=%2290%22/><text x=%2232%22 y=%2250%22 text-anchor=%22middle%22 fill=%22%23B09070%22 font-size=%2224%22>🎬</text></svg>';">
        <div class="anime-meta">
-         <span class="anime-title">${a.titleCN}</span>
-         <div class="anime-sub">
-           <span>${a.year}</span><span>${a.genres[0]}</span><span>${a.studio}</span>
-         </div>
+         <span class="anime-title">${a.cn}</span>
+         <div class="anime-sub">${subHTML}</div>
        </div>`;
     card.addEventListener('click', () => openModal(a));
     grid.appendChild(card);
   });
-}
+});
 
+/* ══════════ 弹窗 ══════════ */
 function openModal(a) {
-  document.getElementById('modalCover').src = a.cover;
-  document.getElementById('modalTitle').textContent = a.titleCN;
+  document.getElementById('modalCover').src = a.cv;
+  document.getElementById('modalTitle').textContent = a.cn;
   document.getElementById('modalMeta').innerHTML =
-    `<span>📅 ${a.year}</span>
-     <span>📺 ${a.episodes} 集</span>
-     <span>🏢 ${a.studio}</span>
-     <span class="modal-score">⭐ ${a.score}</span>
-     <span>${a.genres.join(' · ')}</span>`;
-  document.getElementById('modalSynopsis').textContent = a.synopsis;
+    `<span>📅 ${a.year}</span> <span>📺 ${a.eps} 集</span> <span>🏢 ${a.s}</span> <span class="modal-score">⭐ ${a.sc}</span> <span>${a.gn.join(' · ')}</span>`;
+  document.getElementById('modalSynopsis').textContent = a.sp;
+
+  const note = document.getElementById('modalStudioNote');
+  if (a.studioChange) {
+    note.textContent = a.studioChange;
+    note.style.display = 'block';
+  } else {
+    note.style.display = 'none';
+  }
+
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -284,12 +247,9 @@ function closeModal() {
   overlay.classList.remove('active');
   document.body.style.overflow = '';
 }
-
 document.getElementById('modalClose').addEventListener('click', closeModal);
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-renderCards();
 </script>
 
 </body>
