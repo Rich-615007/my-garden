@@ -5,6 +5,120 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>追番 · 揉碎星辰</title>
 <link rel="stylesheet" href="../style.css">
+<style>
+/* ══════════ 追番页专属 ══════════ */
+.anime-grid {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:16px;
+}
+.anime-card {
+  display:flex; gap:14px;
+  padding:14px; border-radius:var(--radius);
+  background:var(--card);
+  border:1px solid var(--border);
+  cursor:pointer;
+  transition:transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.anime-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 4px 18px rgba(120,90,60,0.12);
+  background:rgba(255,248,236,0.9);
+}
+.anime-cover {
+  width:64px; height:90px; border-radius:3px; flex-shrink:0;
+  object-fit:cover;
+  background:linear-gradient(140deg, #EEE0D0, #DDD0BB);
+}
+.anime-cover--placeholder {
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; color:#C0B090;
+}
+.anime-meta {
+  display:flex; flex-direction:column; gap:4px; min-width:0;
+  justify-content:center;
+}
+.anime-title {
+  font-size:0.9rem; font-weight:600; color:var(--text);
+  line-height:1.3;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.anime-sub {
+  font-size:0.76rem; color:var(--soft);
+  display:flex; gap:8px; flex-wrap:wrap;
+}
+.anime-sub span {
+  background:rgba(200,160,110,0.12);
+  padding:2px 8px; border-radius:3px;
+}
+
+/* ══════════ 弹窗 ══════════ */
+.modal-overlay {
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(40,25,10,0.55);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  z-index:200;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; visibility:hidden;
+  transition:opacity 0.25s, visibility 0.25s;
+}
+.modal-overlay.active {
+  opacity:1; visibility:visible;
+}
+.modal-box {
+  background:rgba(255,252,246,0.96);
+  border-radius:8px;
+  max-width:620px; width:92%;
+  max-height:82vh;
+  overflow-y:auto;
+  box-shadow:0 8px 40px rgba(60,30,10,0.25);
+  display:flex; gap:20px;
+  padding:24px;
+  position:relative;
+  transform:translateY(12px);
+  transition:transform 0.25s;
+}
+.modal-overlay.active .modal-box {
+  transform:translateY(0);
+}
+.modal-close {
+  position:absolute; top:12px; right:16px;
+  width:28px; height:28px;
+  border:none; background:none;
+  font-size:1.2rem; color:var(--soft);
+  cursor:pointer; border-radius:4px;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s, color 0.2s;
+}
+.modal-close:hover { background:rgba(180,140,100,0.12); color:var(--text); }
+.modal-cover-big {
+  width:140px; height:196px; border-radius:4px;
+  object-fit:cover; flex-shrink:0;
+  background:linear-gradient(140deg, #EEE0D0, #DDD0BB);
+}
+.modal-info { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.modal-title { font-size:1.2rem; font-weight:700; color:var(--brown); line-height:1.3; }
+.modal-meta-row {
+  display:flex; gap:12px; flex-wrap:wrap;
+  font-size:0.82rem; color:var(--soft);
+}
+.modal-meta-row span {
+  background:rgba(200,160,110,0.1);
+  padding:2px 8px; border-radius:3px;
+}
+.modal-score { font-weight:700; color:var(--accent); }
+.modal-synopsis {
+  font-size:0.85rem; color:var(--text); line-height:1.8;
+}
+
+@media (max-width:750px) {
+  .anime-grid { grid-template-columns:1fr; }
+  .modal-box { flex-direction:column; align-items:center; padding:20px; }
+  .modal-cover-big { width:120px; height:168px; }
+}
+</style>
 </head>
 <body>
 
@@ -38,28 +152,138 @@
 <section class="subpage">
   <div class="subpage-header">
     <h1 class="subpage-title">📺 追番</h1>
-    <p class="subpage-desc">动画是流动的画，每一帧都是某个人在某个深夜的心跳。</p>
+    <p class="subpage-desc">每一部动画，都是一段被认真对待的时光。</p>
   </div>
 
-  <div class="card-grid">
-    <div class="entry-card">
-      <div class="entry-cover">🎬</div>
-      <div class="entry-info">
-        <span class="entry-title">CLANNAD ～AFTER STORY～</span>
-        <span class="entry-note">花田的风，至今还在某个地方吹着。</span>
-      </div>
-    </div>
-    <div class="entry-card entry-card--empty">
-      <div class="entry-info">
-        <span class="entry-title">—— 等待下一部相遇 ——</span>
-      </div>
-    </div>
+  <div class="anime-grid" id="animeGrid">
+    <!-- JS 动态填充 -->
   </div>
 </section>
 
 <footer class="footer">
   <p>揉碎星辰 · 永远在建，永远未完成。</p>
 </footer>
+
+<!-- 弹窗 -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <img class="modal-cover-big" id="modalCover" src="" alt="">
+    <div class="modal-info">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta-row" id="modalMeta"></div>
+      <p class="modal-synopsis" id="modalSynopsis"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════ 番剧数据库 ══════════
+// 添加新番: 复制一条, 改 id/title/titleCN/year/episodes/score/genres/cover/synopsis
+const animeData = [
+  {
+    id: 4181,
+    title: 'Clannad: After Story',
+    titleCN: 'CLANNAD ～AFTER STORY～',
+    year: 2008, episodes: 24, score: 8.93,
+    genres: ['剧情','恋爱','校园','催泪'],
+    cover: 'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',
+    synopsis: '冈崎朋也和古河渚从高中毕业后，一起经历了成长的酸甜苦辣。朋也在迷茫中学会工作的意义，而渚始终陪伴在他身边。当生活的重量压来时，他们发现彼此是唯一的光。第二季深入探讨家庭、失去与传承——这是一部关于"人生"本身的作品。'
+  },
+  {
+    id: 52991,
+    title: 'Sousou no Frieren',
+    titleCN: '葬送的芙莉莲',
+    year: 2023, episodes: 28, score: 9.32,
+    genres: ['冒险','奇幻','剧情','治愈'],
+    cover: 'https://cdn.myanimelist.net/images/anime/1015/138006l.jpg',
+    synopsis: '打倒魔王后，勇者队伍解散。精灵魔法使芙莉莲拥有漫长的寿命，她独自踏上旅途，重新走过与勇者一行人曾走过的路。在旅途中，她逐渐理解了那些短暂生命里蕴含的意义——那些她当时没能理解的感情，如今从记忆中缓缓浮现。'
+  },
+  {
+    id: 9253,
+    title: 'Steins;Gate',
+    titleCN: '命运石之门',
+    year: 2011, episodes: 24, score: 9.07,
+    genres: ['科幻','悬疑','剧情','时间旅行'],
+    cover: 'https://cdn.myanimelist.net/images/anime/1935/127974l.jpg',
+    synopsis: '自称疯狂科学家的冈部伦太郎，在偶然间发明了可以向过去发送邮件的时间机器。随着对时间线的干涉，他们发现每一次改变都会引发无法预料的连锁反应。为了拯救挚爱的人，冈部必须与命运本身抗争——一次又一次。'
+  },
+  {
+    id: 23273,
+    title: 'Shigatsu wa Kimi no Uso',
+    titleCN: '四月是你的谎言',
+    year: 2014, episodes: 22, score: 8.64,
+    genres: ['音乐','恋爱','校园','催泪'],
+    cover: 'https://cdn.myanimelist.net/images/anime/1405/143284l.jpg',
+    synopsis: '天才钢琴少年有马公生，在母亲去世后失去了聆听钢琴声的能力。直到那个春天，小提琴手宫园薰闯入了他的生活。她用自由奔放的演奏方式告诉公生：音乐不是为了完美，是为了传达。而她的时间，却只剩下最后一个春天。'
+  },
+  {
+    id: 33352,
+    title: 'Violet Evergarden',
+    titleCN: '紫罗兰永恒花园',
+    year: 2018, episodes: 13, score: 8.67,
+    genres: ['剧情','奇幻','治愈','催泪'],
+    cover: 'https://cdn.myanimelist.net/images/anime/1795/95088l.jpg',
+    synopsis: '战争结束，曾是"武器"的少女薇尔莉特失去了双臂和最重要的人。换上义肢的她成为了"自动手记人偶"——替不识字的人代笔写信。在为他人的思念落笔的过程中，她开始理解少佐最后对她说的话——「我爱你」究竟是什么意思。'
+  },
+  {
+    id: 6547,
+    title: 'Angel Beats!',
+    titleCN: '天使的心跳',
+    year: 2010, episodes: 13, score: 7.88,
+    genres: ['奇幻','战斗','校园','催泪'],
+    cover: 'https://cdn.myanimelst.net/images/anime/1244/111115l.jpg',
+    synopsis: '音无结弦在死后世界的校园里醒来，失去了生前的记忆。他加入了"死后世界战线"——一群与"天使"对抗的少年少女。他们拒绝消失，拒绝接受生前未能实现的遗憾。但随着音无逐渐找回记忆，真相浮出水面——这个世界的真正目的，是让人学会告别。'
+  }
+];
+
+// ══════════ 渲染 ══════════
+const grid = document.getElementById('animeGrid');
+const overlay = document.getElementById('modalOverlay');
+
+function renderCards() {
+  animeData.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'anime-card';
+    card.innerHTML =
+      `<img class="anime-cover" src="${a.cover}" alt="${a.titleCN}" loading="lazy"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+       <div class="anime-cover anime-cover--placeholder" style="display:none;">🎬</div>
+       <div class="anime-meta">
+         <span class="anime-title">${a.titleCN}</span>
+         <div class="anime-sub">
+           <span>${a.year}</span><span>${a.genres[0]}</span>
+         </div>
+       </div>`;
+    card.addEventListener('click', () => openModal(a));
+    grid.appendChild(card);
+  });
+}
+
+function openModal(a) {
+  document.getElementById('modalCover').src = a.cover;
+  document.getElementById('modalTitle').textContent = a.titleCN;
+  document.getElementById('modalMeta').innerHTML =
+    `<span>📅 ${a.year}</span>
+     <span>📺 ${a.episodes} 集</span>
+     <span class="modal-score">⭐ ${a.score}</span>
+     <span>${a.genres.join(' · ')}</span>`;
+  document.getElementById('modalSynopsis').textContent = a.synopsis;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+renderCards();
+</script>
 
 </body>
 </html>
