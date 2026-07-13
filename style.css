@@ -1,0 +1,413 @@
+/* =============================================
+   揉碎星辰 · 个人花园
+   视觉参考：CLANNAD ～AFTER STORY～ 花田场景
+   配色：金色夕阳 + 青绿山丘 + 暖白卡片
+   ============================================= */
+
+/* ── 基础 ── */
+:root {
+  --sky-top: #FCEABB;
+  --sky-mid: #F8D98C;
+  --sky-low: #F5E6CC;
+  --hill-back: #B5D6A7;
+  --hill-mid:  #8FC48A;
+  --hill-front:#6DAF6A;
+  --card-bg:   rgba(255,253,248,0.85);
+  --text:      #4A3F35;
+  --text-light:#7A6F65;
+  --accent:    #D4954B;
+  --accent-hover:#C0782E;
+  --gold:      #C8973E;
+  --petal:     #FFF5E8;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "PingFang SC","Microsoft YaHei","Hiragino Sans GB",sans-serif;
+  color: var(--text);
+  background: var(--sky-top);
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── 天空（夕阳渐变） ── */
+.sky {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 65vh;
+  background: linear-gradient(180deg,
+    #FFF2D6 0%,
+    #FCEABB 15%,
+    #F9D98C 35%,
+    #F2C885 50%,
+    #E8C49A 65%,
+    #D4C4A8 80%,
+    #C8D6B8 95%,
+    #B5D6A7 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── 光晕（模拟夕阳柔光） ── */
+.sky::after {
+  content: '';
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60vw;
+  height: 40vh;
+  background: radial-gradient(ellipse,
+    rgba(255,245,220,0.7) 0%,
+    rgba(255,235,190,0.4) 30%,
+    rgba(255,220,160,0.1) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── 山丘 ── */
+.hills {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 50vh;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hill {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-radius: 50% 50% 0 0;
+}
+
+.hill-back {
+  height: 28vh;
+  right: -15%;
+  width: 130%;
+  background: linear-gradient(180deg,
+    var(--hill-back) 0%,
+    #9DC792 100%
+  );
+  bottom: 5vh;
+}
+
+.hill-mid {
+  height: 22vh;
+  left: -10%;
+  width: 120%;
+  background: linear-gradient(180deg,
+    #9ACB90 0%,
+    var(--hill-mid) 100%
+  );
+  bottom: 0;
+}
+
+.hill-front {
+  height: 18vh;
+  right: -5%;
+  width: 115%;
+  background: linear-gradient(180deg,
+    var(--hill-mid) 0%,
+    var(--hill-front) 100%
+  );
+  bottom: -2vh;
+}
+
+/* ── 花朵 ── */
+.flowers-layer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  height: 30vh;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.flower {
+  position: absolute;
+  font-size: 1.4rem;
+  color: #FEF9F0;
+  text-shadow: 0 0 8px rgba(255,250,240,0.6);
+  animation: sway 3s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50%      { transform: rotate(3deg)  translateY(-3px); }
+}
+
+/* ── 飘落花瓣 ── */
+.petals {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.petal {
+  position: absolute;
+  top: -20px;
+  width: 8px;
+  height: 12px;
+  background: var(--petal);
+  border-radius: 50% 0 50% 0;
+  opacity: 0.5;
+  animation: fall linear infinite;
+  box-shadow: 0 0 4px rgba(255,250,240,0.4);
+}
+
+.petal:nth-child(odd) {
+  width: 6px;
+  height: 9px;
+  border-radius: 0 50% 0 50%;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-30px) rotate(0deg) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(50vh) rotate(180deg) translateX(40px);
+    opacity: 0.4;
+  }
+  90% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: translateY(105vh) rotate(360deg) translateX(-20px);
+    opacity: 0;
+  }
+}
+
+/* ── 主内容区 ── */
+.content {
+  position: relative;
+  z-index: 10;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* ── 顶部 ── */
+.hero {
+  text-align: center;
+  padding: 80px 0 50px;
+}
+
+.name {
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #5B3E2E;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 12px rgba(255,240,210,0.6);
+}
+
+.tagline {
+  font-size: 1rem;
+  color: #8B7355;
+  letter-spacing: 0.05em;
+  font-style: italic;
+}
+
+/* ── 内容卡片 ── */
+.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 28px 30px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(200,180,150,0.25);
+  box-shadow:
+    0 2px 20px rgba(120,100,70,0.08),
+    0 0 0 1px rgba(255,250,240,0.4) inset;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow:
+    0 4px 28px rgba(120,100,70,0.13),
+    0 0 0 1px rgba(255,250,240,0.6) inset;
+}
+
+.card h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #5B3E2E;
+  margin-bottom: 18px;
+  letter-spacing: 0.04em;
+}
+
+/* ── 时间线 ── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tl-item {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-left: 8px;
+  border-left: 2px solid rgba(200,160,100,0.3);
+}
+
+.tl-date {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+  min-width: 70px;
+}
+
+.tl-text {
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.tl-empty {
+  border-left-style: dashed;
+}
+
+/* ── 书架标签 ── */
+.shelf-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.shelf-tab {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(200,170,130,0.12);
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.shelf-tab:hover {
+  background: rgba(200,150,100,0.22);
+  color: var(--accent);
+}
+
+/* ── 书架网格 ── */
+.shelf-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shelf-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(250,245,235,0.6);
+  transition: background 0.2s;
+}
+
+.shelf-card:hover {
+  background: rgba(245,235,220,0.8);
+}
+
+.shelf-cover {
+  width: 48px;
+  height: 64px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+
+.cover-placeholder {
+  background: linear-gradient(135deg, #F5E6CC, #E8D5B0);
+  border: 1px solid rgba(180,150,110,0.3);
+}
+
+.shelf-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shelf-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.shelf-note {
+  font-size: 0.82rem;
+  color: var(--text-light);
+  font-style: italic;
+}
+
+.shelf-empty {
+  opacity: 0.6;
+}
+
+/* ── 关于 ── */
+.about-card p {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.contact {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(180,150,120,0.2);
+}
+
+.contact span {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+/* ── 底部 ── */
+footer {
+  text-align: center;
+  padding: 40px 0 30px;
+}
+
+footer p {
+  font-size: 0.8rem;
+  color: #A09080;
+  letter-spacing: 0.04em;
+}
+
+/* ── 响应式（手机） ── */
+@media (max-width: 600px) {
+  .name { font-size: 2rem; }
+  .hero { padding-top: 50px; }
+  .card { padding: 20px 18px; }
+  .shelf-card { gap: 10px; padding: 10px 12px; }
+  .contact { flex-direction: column; gap: 8px; }
+  .tl-item { flex-direction: column; gap: 2px; }
+}

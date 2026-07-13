@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>揉碎星辰 · 个人花园</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 花田背景层 -->
+  <div class="sky"></div>
+  <div class="hills">
+    <div class="hill hill-back"></div>
+    <div class="hill hill-mid"></div>
+    <div class="hill hill-front"></div>
+  </div>
+  <div class="flowers-layer" aria-hidden="true">
+    <span class="flower" style="left:5%; bottom:12%;">✿</span>
+    <span class="flower" style="left:12%; bottom:18%; animation-delay:0.5s;">❀</span>
+    <span class="flower" style="left:20%; bottom:10%; animation-delay:1.2s;">✿</span>
+    <span class="flower" style="left:28%; bottom:16%; animation-delay:0.3s;">✾</span>
+    <span class="flower" style="left:35%; bottom:8%; animation-delay:1.8s;">❀</span>
+    <span class="flower" style="left:42%; bottom:15%; animation-delay:0.7s;">✿</span>
+    <span class="flower" style="left:50%; bottom:11%; animation-delay:1.4s;">✾</span>
+    <span class="flower" style="left:58%; bottom:17%; animation-delay:0.9s;">❀</span>
+    <span class="flower" style="left:65%; bottom:9%; animation-delay:1.6s;">✿</span>
+    <span class="flower" style="left:72%; bottom:14%; animation-delay:0.4s;">✾</span>
+    <span class="flower" style="left:80%; bottom:12%; animation-delay:1.1s;">❀</span>
+    <span class="flower" style="left:88%; bottom:16%; animation-delay:0.8s;">✿</span>
+    <span class="flower" style="left:95%; bottom:10%; animation-delay:1.5s;">✾</span>
+  </div>
+  <div class="petals" aria-hidden="true">
+    <span class="petal" style="left:3%; animation-delay:0s; animation-duration:12s;"></span>
+    <span class="petal" style="left:15%; animation-delay:2s; animation-duration:14s;"></span>
+    <span class="petal" style="left:27%; animation-delay:4s; animation-duration:11s;"></span>
+    <span class="petal" style="left:38%; animation-delay:1s; animation-duration:15s;"></span>
+    <span class="petal" style="left:50%; animation-delay:5s; animation-duration:13s;"></span>
+    <span class="petal" style="left:62%; animation-delay:3s; animation-duration:16s;"></span>
+    <span class="petal" style="left:75%; animation-delay:6s; animation-duration:10s;"></span>
+    <span class="petal" style="left:88%; animation-delay:2.5s; animation-duration:14s;"></span>
+  </div>
+
+  <!-- 主内容 -->
+  <main class="content">
+
+    <!-- 顶部 -->
+    <header class="hero">
+      <h1 class="name">揉碎星辰</h1>
+      <p class="tagline">这里是一片正在生长的花园</p>
+    </header>
+
+    <!-- 现在 -->
+    <section class="card">
+      <h2>✦ 此刻</h2>
+      <div class="timeline">
+        <div class="tl-item">
+          <span class="tl-date">2026.07</span>
+          <span class="tl-text">在设计一个关于心灵修复的游戏</span>
+        </div>
+        <div class="tl-item">
+          <span class="tl-date">2026.07</span>
+          <span class="tl-text">搭建了这个网站，种下第一颗种子</span>
+        </div>
+        <div class="tl-item tl-empty">
+          <span class="tl-text" style="color:#A09080;">…… 更多时刻，正在发生</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 书架 -->
+    <section class="card">
+      <h2>✦ 书架</h2>
+      <div class="shelf-tabs">
+        <span class="shelf-tab">📺 动漫</span>
+        <span class="shelf-tab">📖 漫画</span>
+        <span class="shelf-tab">📚 小说</span>
+        <span class="shelf-tab">📝 轻小说</span>
+      </div>
+      <div class="shelf-grid">
+        <div class="shelf-card">
+          <div class="shelf-cover cover-placeholder">🎬</div>
+          <div class="shelf-info">
+            <span class="shelf-title">CLANNAD ～AFTER STORY～</span>
+            <span class="shelf-note">花田的風，至今还在某个地方吹着</span>
+          </div>
+        </div>
+        <div class="shelf-card shelf-empty">
+          <div class="shelf-info">
+            <span class="shelf-title" style="color:#A09080;">这里等待你的下一部邂逅</span>
+            <span class="shelf-note">看完一部，加一行。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 做的东西 -->
+    <section class="card">
+      <h2>✦ 创造</h2>
+      <div class="shelf-grid">
+        <div class="shelf-card">
+          <div class="shelf-cover cover-placeholder">🎮</div>
+          <div class="shelf-info">
+            <span class="shelf-title">心穴 · Heart Cave</span>
+            <span class="shelf-note">回合制心灵修复游戏 · 设计进行中</span>
+          </div>
+        </div>
+        <div class="shelf-card shelf-empty">
+          <div class="shelf-info">
+            <span class="shelf-title" style="color:#A09080;">更多创造，在路上</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于 -->
+    <section class="card about-card">
+      <h2>✦ 关于我</h2>
+      <p>
+        一个喜欢故事的普通人。<br>
+        喜欢动漫、漫画、轻小说、小说。<br>
+        喜欢在别人的故事里找到自己的影子。<br>
+        也试着写出属于自己的故事。
+      </p>
+      <p>这个网站没有终点——它会和我一起成长。</p>
+      <div class="contact">
+        <span>📧 your-email@example.com</span>
+        <span>🐙 github.com/你的用户名</span>
+      </div>
+    </section>
+
+    <footer>
+      <p>揉碎星辰 · 个人花园 — 永远在建，永远未完成</p>
+    </footer>
+
+  </main>
+</body>
+</html>
