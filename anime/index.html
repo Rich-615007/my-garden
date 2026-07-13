@@ -194,8 +194,7 @@ studioOrder.forEach(st => {
     card.className = 'anime-card';
     // sub row
     let sub = `<span>${a.y}</span><span>${a.g[0]}</span>`;
-    if (a.ch) sub += `<span class="tag-change">换社</span>`;
-    else sub += `<span>${a.s}</span>`;
+    sub += `<span>${a.s}</span>`;
 
     card.innerHTML =
       `<img class="anime-cover" src="${a.cv}" alt="${a.cn}" loading="lazy"
