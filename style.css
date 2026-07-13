@@ -1,7 +1,6 @@
 /* =============================================
    揉碎星辰 · 个人花园
-   视觉：CLANNAD AS 夕阳花田
-   黄昏 · 山丘 · 野花 · 暖光
+   视觉：CLANNAD AS 夕阳花田 — 写实向
    ============================================= */
 
 :root {
@@ -9,11 +8,11 @@
   --brown:   #5B3E2E;
   --text:    #4A3728;
   --soft:    #8B7355;
-  --faint:   #B0A090;
-  --card:    rgba(255,252,247,0.78);
-  --border:  rgba(180,155,125,0.25);
+  --faint:   #A89880;
+  --card:    rgba(255,252,246,0.76);
+  --border:  rgba(180,155,125,0.22);
   --accent:  #C07830;
-  --radius:  6px;
+  --radius:  5px;
   --gutter:  40px;
 }
 
@@ -30,114 +29,114 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ═══════════════ 花田背景系统 ═══════════════ */
-/* 天空 — 黄昏渐变，多色温过渡 */
+/* ═══════════════ 天空 — 黄昏写实渐变 ═══════════════ */
 .field-sky {
   position: fixed; top:0; left:0; width:100%; height:100vh; z-index:0;
   background:
-    /* 最上层：暖光 haze */
-    radial-gradient(ellipse 80% 55% at 50% 42%, rgba(255,242,220,0.45) 0%, transparent 70%),
-    /* 太阳光晕 */
-    radial-gradient(ellipse 30% 20% at 50% 48%, rgba(255,235,200,0.6) 0%, rgba(255,220,170,0.2) 40%, transparent 70%),
-    /* 天空渐变 */
+    /* 太阳光晕 — 在地平线上方 */
+    radial-gradient(ellipse 55% 18% at 50% 50%, rgba(255,238,200,0.65) 0%, rgba(255,228,175,0.3) 35%, transparent 70%),
+    /* 上层暖光漫射 */
+    radial-gradient(ellipse 70% 40% at 50% 30%, rgba(255,240,215,0.35) 0%, transparent 65%),
+    /* 主渐变 */
     linear-gradient(178deg,
-      #FDF5E6  0%,
-      #FAE8CA  8%,
-      #F5D8A8 18%,
-      #EFCB93 28%,
-      #E8C088 38%,
-      #DFB780 48%,
-      #D8B078 55%,
-      #CFAB7A 62%,
-      #C8A888 70%,
-      #BDAA90 78%,
-      #B4B098 85%,
-      #ACBAA0 92%,
-      #A8C0A2 100%
+      #FCF3E4  0%,
+      #F8E5C4  6%,
+      #F3D6A6 13%,
+      #EEC994 20%,
+      #E8BF85 28%,
+      #E2B87A 36%,
+      #DCB274 44%,
+      #D6AD72 50%,
+      #CFA97A 56%,
+      #C8A684 62%,
+      #C0A38E 68%,
+      #B9A396 74%,
+      #B1A69A 80%,
+      #AAABA0 86%,
+      #A3B2A5 92%,
+      #9EBAA8 100%
     );
   pointer-events: none;
 }
 
-/* 山丘 — 三层，自然曲线 */
+/* 光柱 — 从云层缝隙穿过的丁达尔光线 */
+.field-sky::after {
+  content: '';
+  position: fixed;
+  top: 8%; left: 40%; width: 20%; height: 55%;
+  background: linear-gradient(172deg,
+    transparent 0%,
+    rgba(255,242,215,0.12) 25%,
+    rgba(255,238,200,0.15) 50%,
+    rgba(255,232,185,0.08) 75%,
+    transparent 100%
+  );
+  transform: skewX(-8deg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════ 远山层 ═══════════════ */
 .field-hills {
-  position: fixed; bottom:0; left:0; width:100%; height:62vh; z-index:1;
+  position: fixed; bottom:0; left:0; width:100%; height:60vh; z-index:1;
   pointer-events: none;
 }
 
 .field-hill {
-  position: absolute; bottom:0; width:120%; left:-10%;
+  position: absolute; bottom:0;
 }
 
-/* 远山 — 最淡，最高 */
+/* 最远 — 淡蓝绿，大气透视 */
 .field-hill--far {
-  height: 34vh;
-  background: linear-gradient(178deg, #B5C8A4 0%, #A8BF98 30%, #9BB58C 60%, #8EAC80 100%);
-  border-radius: 48% 52% 0 0 / 38% 42% 0 0;
-  bottom: 8vh;
-  opacity: 0.88;
+  left:-5%; width:112%; height:32vh;
+  background: linear-gradient(178deg, #B2C6A8 0%, #A8BEA0 25%, #9EB698 50%, #94AE90 100%);
+  border-radius: 42% 58% 0 0 / 55% 45% 0 0;
+  bottom: 9vh;
+  opacity: 0.82;
 }
 
-/* 中山 — 中间层 */
+/* 中山 — 过渡色 */
 .field-hill--mid {
-  height: 24vh;
-  background: linear-gradient(178deg, #A2BF90 0%, #92B280 30%, #83A672 60%, #739A64 100%);
-  border-radius: 44% 56% 0 0 / 42% 38% 0 0;
-  bottom: 2vh;
+  left:-8%; width:118%; height:22vh;
+  background: linear-gradient(178deg, #A0B892 0%, #94B088 25%, #88A67E 50%, #7C9C74 100%);
+  border-radius: 48% 52% 0 0 / 48% 52% 0 0;
+  bottom: 3vh;
+  opacity: 0.87;
+}
+
+/* 近丘 — 饱和度最高 */
+.field-hill--near {
+  left:-3%; width:108%; height:15vh;
+  background: linear-gradient(178deg, #8CAD7A 0%, #80A370 25%, #749966 50%, #688F5C 100%);
+  border-radius: 44% 56% 0 0 / 44% 56% 0 0;
+  bottom: -1vh;
   opacity: 0.90;
 }
 
-/* 近丘 — 最深，最前 */
-.field-hill--near {
-  height: 17vh;
-  background: linear-gradient(178deg, #8DB478 0%, #7DA868 30%, #6D9C58 40%, #5E9048 100%);
-  border-radius: 46% 54% 0 0 / 40% 44% 0 0;
-  bottom: -2vh;
-  opacity: 0.92;
-}
-
-/* 花田光点 — 散布在山丘上的小花 */
+/* ═══════════════ 花 — 散布在近丘上的野花 ═══════════════ */
 .field-flowers {
-  position: fixed; bottom:0; left:0; width:100%; height:50vh; z-index:2;
+  position: fixed; bottom:0; left:0; width:100%; height:24vh; z-index:2;
   pointer-events: none;
 }
 
 .field-flower {
   position: absolute;
-  width: 5px; height: 5px;
-  background: #FFFEF8;
+  width: 4px; height: 4px;
+  background: #FFFEF6;
   border-radius: 50%;
-  opacity: 0;
-  box-shadow:
-    0 0 3px rgba(255,252,240,0.7),
-    0 0 6px rgba(255,248,230,0.4);
-  animation: flowerGlow 4s ease-in-out infinite;
+  box-shadow: 0 0 2px rgba(255,252,240,0.5);
+  animation: fGlow 5s ease-in-out infinite;
 }
-
-@keyframes flowerGlow {
-  0%, 100% { opacity:0.15; transform:scale(1); }
-  50%      { opacity:0.45; transform:scale(1.4); }
+.field-flower:nth-child(even) {
+  width: 3px; height: 3px;
+  box-shadow: 0 0 3px rgba(255,250,235,0.6);
 }
-
-/* 光尘 — 空气中浮动的微粒 */
-.field-dust {
-  position: fixed; top:0; left:0; width:100%; height:100vh; z-index:3;
-  pointer-events: none;
+.field-flower:nth-child(3n) {
+  background: #FFF9E8;
 }
-
-.field-dust-particle {
-  position: absolute;
-  width: 2px; height: 2px;
-  background: rgba(255,245,225,0.7);
-  border-radius: 50%;
-  animation: dustFloat 8s ease-in-out infinite;
-}
-
-@keyframes dustFloat {
-  0%   { transform:translateY(0)   translateX(0);   opacity:0; }
-  10%  { opacity:0.6; }
-  50%  { transform:translateY(-30vh) translateX(15px); opacity:0.3; }
-  90%  { opacity:0; }
-  100% { transform:translateY(-60vh) translateX(-10px); opacity:0; }
+@keyframes fGlow {
+  0%,100% { opacity:0.18; transform:scale(1); }
+  50%     { opacity:0.42; transform:scale(1.35); }
 }
 
 /* ═══════════════ 导航栏 ═══════════════ */
@@ -145,19 +144,33 @@ body {
   position: sticky; top:0; z-index:100;
   display:flex; align-items:center; justify-content:space-between;
   padding:0 var(--gutter); height:50px;
-  background: rgba(250,243,232,0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(200,180,150,0.18);
+  background: rgba(250,243,232,0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(200,180,150,0.15);
 }
+
 .nav-brand a {
-  font-size:1.05rem; font-weight:700; color:var(--brown);
-  text-decoration:none; letter-spacing:0.06em;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: transparent;
+  background: linear-gradient(135deg, #C07830 0%, #D4954B 25%, #E0B060 50%, #C98538 75%, #B06A28 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 1px 2px rgba(180,100,40,0.25));
+  text-decoration: none;
+  transition: filter 0.3s;
 }
+.nav-brand a:hover {
+  filter: drop-shadow(0 2px 4px rgba(180,100,40,0.4));
+}
+
 .nav-links { display:flex; gap:26px; }
 .nav-links a {
   font-size:0.85rem; color:var(--soft); text-decoration:none;
-  letter-spacing:0.03em; transition:color 0.2s;
+  letter-spacing:0.04em;
   padding:4px 0;
   border-bottom:2px solid transparent;
   transition: color 0.2s, border-color 0.2s;
@@ -169,11 +182,11 @@ body {
   position:relative; z-index:10;
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   min-height:calc(100vh - 50px);
-  padding:0 var(--gutter) 60px;
+  padding:0 var(--gutter) 80px;
   text-align:center;
 }
 
-.hero-quote { margin-bottom:40px; }
+.hero-quote { margin-bottom:44px; }
 .hero-line {
   font-size:1.7rem; font-weight:600; color:var(--brown);
   letter-spacing:0.07em; line-height:1.9;
@@ -183,19 +196,10 @@ body {
   margin-top:10px;
 }
 
-.hero-intro { margin-bottom:48px; }
+.hero-intro { margin-bottom:0; }
 .hero-intro p {
   font-size:1rem; color:var(--soft);
   line-height:2.3; letter-spacing:0.04em;
-}
-
-.hero-hint {
-  font-size:0.8rem; color:var(--faint); letter-spacing:0.06em;
-  animation: hintPulse 2.5s ease-in-out infinite;
-}
-@keyframes hintPulse {
-  0%,100% { opacity:0.35; }
-  50%     { opacity:0.7; }
 }
 
 /* ═══════════════ 子页面通用 ═══════════════ */
@@ -219,7 +223,7 @@ body {
   font-size:0.88rem; color:var(--soft); margin-top:6px;
 }
 
-/* ═══════════════ 卡片网格 ═══════════════ */
+/* ═══════════════ 卡片 ═══════════════ */
 .card-grid {
   display:grid;
   grid-template-columns: repeat(3, 1fr);
@@ -234,8 +238,8 @@ body {
   transition:background 0.25s, box-shadow 0.25s;
 }
 .entry-card:hover {
-  background:rgba(255,248,236,0.88);
-  box-shadow:0 1px 10px rgba(120,90,60,0.07);
+  background:rgba(255,248,236,0.86);
+  box-shadow:0 1px 10px rgba(120,90,60,0.06);
 }
 
 .entry-cover {
@@ -254,7 +258,7 @@ body {
   font-weight:400; color:var(--faint); font-style:italic;
 }
 
-/* ═══════════════ 关于页 ═══════════════ */
+/* ═══════════════ 关于 ═══════════════ */
 .about-text p {
   font-size:0.95rem; color:var(--text); line-height:2.2; margin-bottom:6px;
 }
@@ -282,7 +286,7 @@ body {
 @media (max-width:600px) {
   :root { --gutter:18px; }
   .card-grid { grid-template-columns:1fr; }
-  .nav-brand { font-size:0.95rem; }
+  .nav-brand a { font-size:1.1rem; }
   .nav-links { gap:10px; overflow-x:auto; }
   .nav-links a { font-size:0.72rem; white-space:nowrap; }
   .hero-line { font-size:1.15rem; }
