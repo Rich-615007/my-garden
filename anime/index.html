@@ -25,7 +25,11 @@
   font-size:1rem; font-weight:700; color:var(--brown);
   padding:8px 0 6px; margin-bottom:12px;
   border-bottom:2px solid rgba(180,150,120,.25); letter-spacing:.04em;
+  cursor:pointer; user-select:none;
+  display:flex; align-items:center; justify-content:space-between;
 }
+.studio-head::after { content:'▼'; font-size:.65rem; color:var(--soft); transition:transform .25s; }
+.studio-head.collapsed::after { transform:rotate(-90deg); }
 .studio-head small { font-weight:400; font-size:.78rem; color:var(--soft); margin-left:8px; }
 
 .modal-overlay {
@@ -268,7 +272,12 @@ studioOrder.forEach(st => {
   sec.innerHTML = `<div class="studio-head">🎬 ${st}<small>${items.length} 部</small></div>
     <div class="anime-grid"></div>`;
   root.appendChild(sec);
+  const head = sec.querySelector('.studio-head');
   const grid = sec.querySelector('.anime-grid');
+  head.addEventListener('click', () => {
+    head.classList.toggle('collapsed');
+    grid.style.display = grid.style.display === 'none' ? '' : 'none';
+  });
 
   items.forEach(a => {
     const card = document.createElement('div');
