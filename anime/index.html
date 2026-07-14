@@ -269,8 +269,7 @@ studioOrder.forEach(st => {
   if (!items) return;
   const sec = document.createElement('div');
   sec.className = 'studio-section';
-  const icons = {'Kyoto Animation':'🏛️','J.C.Staff':'⚡','Bones':'💀','8-bit':'8️⃣','Shaft':'🔷','Gonzo':'🎪','Sunrise':'🌅','Studio DEEN':'🎭','David Production':'💎','Trigger':'🔥','Gainax':'🚀','Satelight':'🎵','AIC PLUS+':'⭐','Madhouse':'🏚️','White Fox':'🦊','A-1 Pictures':'🅰️','Doga Kobo':'🐶','P.A. Works':'🌈'};
-  sec.innerHTML = `<div class="studio-head">${icons[st]||'🎬'} ${st}<small>${items.length} 部</small></div>
+  sec.innerHTML = `<div class="studio-head">🎬 ${st}<small>${items.length} 部</small></div>
     <div class="anime-grid"></div>`;
   root.appendChild(sec);
   const head = sec.querySelector('.studio-head');
