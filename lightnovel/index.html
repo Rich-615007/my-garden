@@ -129,10 +129,16 @@ const DB = [
   {cn:'物语系列 第二季',en:'Monogatari Second Season',y:2010,v:1,sc:8.8,pub:'講談社BOX',author:'西尾維新',g:['奇幻','悬疑','剧情'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx53751-1PHRYYsVP2cE.jpg',sp:'含猫物语白、倾物语、花物语、囮物语、鬼物语、恋物语。以羽川翼、八九寺、骏河、抚子、忍野、战场原为叙述者的六部作品。'},
   {cn:'物语系列 最终季',en:'Monogatari Final Season',y:2012,v:1,sc:8.4,pub:'講談社BOX',author:'西尾維新',g:['奇幻','悬疑','剧情'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx74227-mjLz68FCTTKT.jpg',sp:'含凭物语、终物语上中下、续终物语。历的高中三年进入尾声。与忍野扇的相遇揭开了最后的谜底。物语系列的终结。'},
   {cn:'物语系列 Off Season',en:'Monogatari Off Season',y:2015,v:1,sc:8.2,pub:'講談社BOX',author:'西尾維新',g:['奇幻','悬疑','剧情'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx96019-YkPag7iKMXiF.jpg',sp:'含愚物语、业物语、抚物语等。物语系列的后日谈与续写。高中毕业后，每个角色的道路仍然继续。'},
+
+  {cn:'约会大作战',en:'Date A Live',y:2011,v:22,sc:8.0,pub:'電撃文庫',author:'橘公司',g:['奇幻','恋爱','喜剧','后宫'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx67523-mzbSAv4NHsvY.jpg',sp:'五河士道拥有与精灵约会使其娇羞从而封印力量的能力。为了拯救被人类视为灾厄的精灵少女们，士道的约会拯救之旅开始了。全22卷完结。'},
+
+  /* ── MF文庫J ── */
+  {cn:'游戏人生',en:'No Game No Life',y:2012,v:12,sc:8.1,pub:'MF文庫J',author:'榎宮祐',g:['奇幻','冒险','策略'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx78399-ohUhCDKw0CJs.jpg',sp:'空和白——在游戏中无敌的兄妹被自称神的少年特图召唤到异世界。那里一切争端由游戏决定。不在场的两人要用智力与棋艺征服这个世界。全12卷，连载再开。'},
+  {cn:'迷生教',en:'Hitozuma Kyoushi ga Joshikousei ni Dohamari Suru Hanashi',y:2024,v:3,sc:6.5,pub:'電撃文庫',author:'入間人間',g:['恋爱','校园','喜剧','百合'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx185410-yn7oNvxu0zXm.jpg',sp:'人妻女教师被女高中生迷得神魂颠倒。入間人間继安达与岛村之后的百合新作。教师与学生的禁断恋爱，令人心动的禁忌关系。'},
 ];
 
 // ========== 按出版社分组 ==========
-const pubOrder = ['電撃文庫','角川スニーカー文庫','講談社BOX'];
+const pubOrder = ['電撃文庫','角川スニーカー文庫','MF文庫J','講談社BOX'];
 const groups = {};
 DB.forEach(a => {
   if (!groups[a.pub]) groups[a.pub] = [];
