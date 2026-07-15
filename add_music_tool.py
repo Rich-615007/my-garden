@@ -42,7 +42,7 @@ def fetch_ncm_detail(ncm_id):
     if code != 0: return None
     try:
         song = json.loads(out)['songs'][0]
-        album = song.get('al', {})
+        album = song.get('album', {})
         artists = [a['name'] for a in song.get('ar', [])]
         return {
             'name': song.get('name', ''),
