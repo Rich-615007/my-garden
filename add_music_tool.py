@@ -43,14 +43,19 @@ def fetch_ncm_detail(ncm_id):
     try:
         song = json.loads(out)['songs'][0]
         album = song.get('album', {})
-        artists = [a['name'] for a in song.get('ar', [])]
+        artists = [a['name'] for a in song.get('artists', [])]
+        fee = song.get('fee', 0)
+        year_ms = song.get('publishTime', 0) or album.get('publishTime', 0) or 0
         return {
             'name': song.get('name', ''),
             'artists': artists,
             'album_name': album.get('name', ''),
             'album_cover': album.get('picUrl', ''),
             'duration': song.get('dt', 0) // 1000,
-            'year': album.get('publishTime', 0) // 1000 if album.get('publishTime') else 0,
+            'year': year_ms // 1000 if year_ms else 0,
+            'fee': fee,
+            'can_play': (fee == 0 or fee == 8) and song.get('status', 1) >= 0,
+            'warning': 'VIP(external unplayable)' if fee == 1 else ('paid album' if fee > 1 else ''),
         }
     except: return None
 
@@ -93,13 +98,20 @@ def validate_file():
     results['v4_structure'] = (db_starts == 1 and source_orders == 1 and brace_bal,
                                 f"DB={db_starts} srcOrder={source_orders} braces={'OK' if brace_bal else 'FAIL'}")
 
-    # V5: ncmId available
+    # V5: ncmId accessible
     ncm_ids = re.findall(r"ncm:(\d+)", html)
     ncm_fails = 0
     for nid in set(ncm_ids):
         if not verify_url(f"https://music.163.com/song?id={nid}"):
             ncm_fails += 1
     results['v5_ncm'] = (ncm_fails == 0, f"{ncm_fails}/{len(set(ncm_ids))} ncm fail" if ncm_fails else "all pass")
+
+    # V6: forEach variable consistency (catch groups[a] vs groups[src] bugs)
+    var_issues = []
+    if re.search(r'sourceOrder\.forEach\s*\(\s*src\s*=>', html):
+        if re.search(r'groups\[a\]', html):
+            var_issues.append('forEach uses src but groups[a] found')
+    results['v6_vars'] = (len(var_issues) == 0, "; ".join(var_issues) if var_issues else "pass")
 
     blocking = {k: v for k, v in results.items() if k != 'v2_http'}
     all_pass = all(v[0] for v in blocking.values())
@@ -191,6 +203,8 @@ def add_music(ncm_ids, interactive=True):
         print(f"  歌曲: {data['name']}")
         print(f"  歌手: {', '.join(data['artists'])}")
         print(f"  专辑: {data['album_name']}")
+        if data.get('warning'):
+            print(f"  !! {data['warning']} !!")
 
         if interactive:
             cn_name = input("  中文名(回车=原名): ").strip() or data['name']
