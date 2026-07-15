@@ -145,27 +145,31 @@
 // 字段: id, cn, album, artist, lyricist, composer, arranger, year, trackNo, duration, sc, cv, ncmId, sp
 const DB = [
   // --- eufonius ---
-  {id:'clannad_op',cn:'メグメル',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['eufonius'],lyricist:'riya',composer:'eufonius',arranger:'菊地創',y:2004,tn:1,dr:0,sc:9.2,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:22706981,sp:'CLANNAD OP。樱花坡道、长长的等待、慢慢改变的世界。前奏响起的瞬间，一切都回来了。'},
+  {id:'clannad_op',cn:'メグメル',source:'CLANNAD',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['eufonius'],lyricist:'riya',composer:'eufonius',arranger:'菊地創',y:2004,tn:1,dr:0,sc:9.2,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:22706981,sp:'CLANNAD OP。'},
   // --- Chata ---
-  {id:'clannad_ed',cn:'だんご大家族',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['Chata'],lyricist:'麻枝准',composer:'麻枝准',arranger:'たくまる',y:2004,tn:2,dr:0,sc:9.5,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:760533,sp:'CLANNAD ED。团子团子团子团子团子大家族。最简单的旋律，却让无数人泣不成声。'},
+  {id:'clannad_ed',cn:'だんご大家族',source:'CLANNAD',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['Chata'],lyricist:'麻枝准',composer:'麻枝准',arranger:'たくまる',y:2004,tn:2,dr:0,sc:9.5,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:760533,sp:'CLANNAD ED。团子大家族。最简单的旋律，最深的感动。'},
   // --- Lia ---
-  {id:'clannad_as_op',cn:'時を刻む唄',album:'時を刻む唄／TORCH',artist:['Lia'],lyricist:'麻枝准',composer:'麻枝准',arranger:'ANANT-GARDE EYES',y:2008,tn:1,dr:0,sc:9.5,cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',ncm:608667,sp:'CLANNAD ～AFTER STORY～ OP。时针走过的每一秒，都在提醒我们珍惜眼前的人。'},
-  {id:'clannad_as_ed',cn:'TORCH',album:'時を刻む唄／TORCH',artist:['Lia'],lyricist:'魁',composer:'折戸伸治',arranger:'福士健太郎',y:2008,tn:2,dr:0,sc:8.8,cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',ncm:608669,sp:'CLANNAD AS ED。回忆如灯火般摇曳，微弱却温暖。'},
-  // --- Riya ---
-  {id:'clannad_th',cn:'小さなてのひら',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['Riya'],lyricist:'麻枝准',composer:'麻枝准',arranger:'たくまる',y:2004,tn:3,dr:0,sc:9.5,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:22707025,sp:'CLANNAD AS 插入歌。小小的手心，握住的是全部的世界和全部的爱。'},
+  {id:'clannad_as_op',cn:'時を刻む唄',source:'CLANNAD',album:'時を刻む唄／TORCH',artist:['Lia'],lyricist:'麻枝准',composer:'麻枝准',arranger:'ANANT-GARDE EYES',y:2008,tn:1,dr:0,sc:9.5,cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',ncm:608667,sp:'CLANNAD AS OP。'},
+  {id:'clannad_as_ed',cn:'TORCH',source:'CLANNAD',album:'時を刻む唄／TORCH',artist:['Lia'],lyricist:'魁',composer:'折戸伸治',arranger:'福士健太郎',y:2008,tn:2,dr:0,sc:8.8,cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',ncm:608669,sp:'CLANNAD AS ED。'},
+  {id:'clannad_th',cn:'小さなてのひら',source:'CLANNAD',album:'CLANNAD ORIGINAL SOUNDTRACK',artist:['Riya'],lyricist:'麻枝准',composer:'麻枝准',arranger:'たくまる',y:2004,tn:3,dr:0,sc:9.5,cv:'https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg',ncm:22707025,sp:'CLANNAD AS 插入歌。'},
+
+  // --- 独立音乐 ---
+  {id:'shin_takara',cn:'新宝島',source:'独立: サカナクション',album:'新宝島',artist:['サカナクション'],lyricist:'山口一郎',composer:'山口一郎',arranger:'サカナクション',y:2015,tn:1,dr:302,sc:9.0,cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx98610-TIf7R1gkU0vc.jpg',ncm:35040360,sp:'サカナクション的复活之作。ドリフの大爆笑みたいな未来を作りたい。'},
 ];
 
-// ========== 分组 ==========
-const artistOrder = ['eufonius','Chata','Lia','Riya'];
+// ========== 按来源分组 ==========
+const sourceOrder = ['CLANNAD','独立: サカナクション'];
 const groups = {};
 DB.forEach(s => {
-  const a = s.artist[0];
-  if (!groups[a]) groups[a] = [];
-  groups[a].push(s);
+  const src = s.source || '其他';
+  if (!groups[src]) groups[src] = [];
+  groups[src].push(s);
+  // 自动发现未列在sourceOrder的来源
+  if (!sourceOrder.includes(src)) sourceOrder.push(src);
 });
 // 组内排序: album → trackNo
-for (const a in groups) {
-  groups[a].sort((x,y) => x.album.localeCompare(y.album) || x.tn - y.tn);
+for (const src in groups) {
+  groups[src].sort((x,y) => x.album.localeCompare(y.album) || x.tn - y.tn);
 }
 
 // ========== 渲染 ==========
@@ -210,13 +214,14 @@ function renderCards(items, grid) {
   });
 }
 
-artistOrder.forEach(a => {
+sourceOrder.forEach(src => {
   const items = groups[a];
   if (!items) return;
   const sec = document.createElement('div');
   sec.className = 'artist-section';
-  sec.setAttribute('data-artist', a);
-  sec.innerHTML = `<div class="artist-head">🎤 ${a}<small>${items.length} 首</small></div>
+  sec.setAttribute('data-source', src);
+  const icon = src.startsWith('独立:') ? '🎸' : '🎬';
+  sec.innerHTML = `<div class="artist-head">${icon} ${src}<small>${items.length} 首</small></div>
     <div class="music-grid"></div>`;
   root.appendChild(sec);
   const head = sec.querySelector('.artist-head');
@@ -227,7 +232,7 @@ artistOrder.forEach(a => {
   head.classList.add('collapsed');
 
   // localStorage恢复
-  const savedFold = localStorage.getItem('music_fold_' + a);
+  const savedFold = localStorage.getItem('music_fold_' + src);
   if (savedFold === 'open') {
     grid.style.display = '';
     head.classList.remove('collapsed');
@@ -236,7 +241,7 @@ artistOrder.forEach(a => {
   head.addEventListener('click', () => {
     const isCollapsed = head.classList.toggle('collapsed');
     grid.style.display = isCollapsed ? 'none' : '';
-    localStorage.setItem('music_fold_' + a, isCollapsed ? 'closed' : 'open');
+    localStorage.setItem('music_fold_' + src, isCollapsed ? 'closed' : 'open');
   });
   renderCards(items, grid);
 });
@@ -246,7 +251,7 @@ document.getElementById('searchBox').addEventListener('input', function(e) {
   const q = e.target.value.toLowerCase().trim();
   document.querySelectorAll('.artist-section').forEach(sec => {
     if (!q) { sec.style.display = ''; return; }
-    const artist = (sec.getAttribute('data-artist')||'').toLowerCase();
+    const artist = (sec.getAttribute('data-source')||'').toLowerCase();
     let match = artist.includes(q);
     sec.querySelectorAll('.music-card').forEach(c => {
       const text = c.textContent.toLowerCase();
@@ -262,7 +267,7 @@ document.getElementById('btnExpandAll').addEventListener('click', () => {
   document.querySelectorAll('.artist-head').forEach(h => {
     h.classList.remove('collapsed');
     h.nextElementSibling.style.display = '';
-    const a = h.closest('.artist-section').getAttribute('data-artist');
+    const a = h.closest('.artist-section').getAttribute('data-source');
     localStorage.setItem('music_fold_' + a, 'open');
   });
 });
@@ -270,7 +275,7 @@ document.getElementById('btnCollapseAll').addEventListener('click', () => {
   document.querySelectorAll('.artist-head').forEach(h => {
     h.classList.add('collapsed');
     h.nextElementSibling.style.display = 'none';
-    const a = h.closest('.artist-section').getAttribute('data-artist');
+    const a = h.closest('.artist-section').getAttribute('data-source');
     localStorage.setItem('music_fold_' + a, 'closed');
   });
 });
