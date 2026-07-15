@@ -76,7 +76,7 @@
 .modal-meta-row { display:flex; gap:8px; flex-wrap:wrap; font-size:.8rem; color:var(--soft); }
 .modal-meta-row span { background:rgba(200,160,110,.1); padding:2px 8px; border-radius:3px; }
 .modal-synopsis { font-size:.82rem; color:var(--text); line-height:1.7; }
-.modal-player { margin-top:4px; padding-top:12px; border-top:1px solid var(--border); }
+.modal-player { margin-top:4px; padding-top:12px; border-top:1px solid var(--border); flex-shrink:0; min-height:80px; }
 .player-fallback { font-size:.78rem; color:var(--soft); padding:8px 0; }
 .player-fallback a { color:var(--accent); }
 
@@ -295,9 +295,9 @@ function openModal(s) {
   const playerDiv = document.getElementById('modalPlayer');
   playerDiv.innerHTML = '';
   const iframe = document.createElement('iframe');
-  iframe.src = `https://music.163.com/outchain/player?type=2&id=${s.ncm}&auto=0&height=66`;
+  iframe.src = `https://music.163.com/outchain/player?type=2&id=${s.ncm}&auto=0&height=90`;
   iframe.width = '100%';
-  iframe.height = '66';
+  iframe.height = '100';
   iframe.frameBorder = '0';
   iframe.style.borderRadius = '8px';
   iframe.onerror = () => showFallback(playerDiv, s.ncm);
