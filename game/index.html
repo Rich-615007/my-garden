@@ -5,6 +5,39 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>游戏 · 揉碎星辰</title>
 <link rel="stylesheet" href="../style.css">
+<style>
+.game-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.game-card {
+  display:flex; gap:14px; padding:14px; border-radius:var(--radius);
+  background:var(--card); border:1px solid var(--border);
+  cursor:pointer; transition:transform .2s,box-shadow .2s,background .2s;
+}
+.game-card:hover { transform:translateY(-2px); box-shadow:0 4px 18px rgba(120,90,60,.12); background:rgba(255,248,236,.9); }
+.game-cover { width:64px; height:64px; border-radius:4px; flex-shrink:0; object-fit:cover; background:linear-gradient(140deg,#EEE0D0,#DDD0BB); }
+.game-meta { display:flex; flex-direction:column; gap:4px; min-width:0; justify-content:center; }
+.game-title { font-size:.9rem; font-weight:600; color:var(--text); line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.game-sub { font-size:.74rem; color:var(--soft); display:flex; gap:6px; flex-wrap:wrap; }
+.game-sub span { background:rgba(200,160,110,.12); padding:2px 6px; border-radius:3px; }
+.dev-section { margin-bottom:28px; }
+.dev-head { font-size:1rem; font-weight:700; color:var(--brown); padding:8px 0 6px; margin-bottom:12px; border-bottom:2px solid rgba(180,150,120,.25); letter-spacing:.04em; cursor:pointer; user-select:none; display:flex; align-items:center; justify-content:space-between; }
+.dev-head::after { content:'▼'; font-size:.65rem; color:var(--soft); transition:transform .25s; }
+.dev-head.collapsed::after { transform:rotate(-90deg); }
+.dev-head small { font-weight:400; font-size:.78rem; color:var(--soft); margin-left:8px; }
+.modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(40,25,10,.55); backdrop-filter:blur(4px); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .25s,visibility .25s; }
+.modal-overlay.active { opacity:1; visibility:visible; }
+.modal-box { background:rgba(255,252,246,.96); border-radius:8px; max-width:560px; width:92%; max-height:82vh; overflow-y:auto; box-shadow:0 8px 40px rgba(60,30,10,.25); display:flex; gap:20px; padding:24px; position:relative; transform:translateY(12px); transition:transform .25s; }
+.modal-overlay.active .modal-box { transform:translateY(0); }
+.modal-close { position:absolute; top:12px; right:16px; width:28px; height:28px; border:none; background:none; font-size:1.2rem; color:var(--soft); cursor:pointer; border-radius:4px; display:flex; align-items:center; justify-content:center; }
+.modal-close:hover { background:rgba(180,140,100,.12); color:var(--text); }
+.modal-cover-big { width:140px; height:140px; border-radius:6px; object-fit:cover; flex-shrink:0; background:linear-gradient(140deg,#EEE0D0,#DDD0BB); }
+.modal-info { display:flex; flex-direction:column; gap:10px; min-width:0; }
+.modal-title { font-size:1.2rem; font-weight:700; color:var(--brown); line-height:1.3; }
+.modal-meta-row { display:flex; gap:10px; flex-wrap:wrap; font-size:.82rem; color:var(--soft); }
+.modal-meta-row span { background:rgba(200,160,110,.1); padding:2px 8px; border-radius:3px; }
+.modal-score { font-weight:700; color:var(--accent); }
+.modal-synopsis { font-size:.85rem; color:var(--text); line-height:1.8; }
+@media(max-width:750px){ .game-grid{grid-template-columns:1fr} .modal-box{flex-direction:column;align-items:center} .modal-cover-big{width:100px;height:100px} }
+</style>
 </head>
 <body>
 
@@ -33,18 +66,77 @@
 <section class="subpage">
   <div class="subpage-header">
     <h1 class="subpage-title">游戏</h1>
-    <p class="subpage-desc">玩过的、在玩的、想玩的——记录下每一段游戏时光。</p>
+    <p class="subpage-desc">按制作公司分类 · 同系列相邻</p>
   </div>
-  <div class="card-grid">
-    <div class="entry-card entry-card--empty">
-      <div class="entry-info">
-        <span class="entry-title">—— 等待第一个游戏加入 ——</span>
-      </div>
-    </div>
-  </div>
+  <div id="gameRoot"></div>
 </section>
 
 <footer class="footer"><p>揉碎星辰 · 永远在建，永远未完成。</p></footer>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">&times;</button>
+    <img class="modal-cover-big" id="modalCover" src="" alt="">
+    <div class="modal-info">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta-row" id="modalMeta"></div>
+      <p class="modal-synopsis" id="modalSynopsis"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = [
+  /* ── FromSoftware ── */
+  {id:'g01',cn:'艾尔登法环',en:'Elden Ring',dev:'FromSoftware',pub:'Bandai Namco',y:2022,pf:'PS5/PS4/Xbox/PC',sc:9.6,g:['开放世界','动作RPG','奇幻'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202110/2000/aGhopp3MHppi7kooGE2Dtt8C.png',sp:'褪色者啊，在狭间之地追寻艾尔登法环。乔治RR马丁与宫崎英高的合作之作。开放世界魂系巅峰。'},
+  {id:'g02',cn:'艾尔登法环 黄金树幽影',en:'Elden Ring SotE',dev:'FromSoftware',pub:'Bandai Namco',y:2024,pf:'PS5/Xbox/PC',sc:9.2,g:['开放世界','动作RPG','奇幻'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202402/2112/0ba49bbbc0d1ec6e6a28a30f2e7020e0a87e3fc4f0d43380.png',sp:'前往幽影之地。追寻米凯拉的足迹。规模超越本体的超大型DLC。'},
+  /* ── Capcom ── */
+  {id:'g03',cn:'怪物猎人 世界',en:'MH World',dev:'Capcom',pub:'Capcom',y:2018,pf:'PS4/Xbox/PC',sc:9.0,g:['动作','狩猎','多人'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202010/0814/3TpXJXOIYAX7nDQ9mUw7CkR3.png',sp:'新大陆的猎人之星。Capcom历史上最高销量的单一作品。生态系狩猎的革新之作。'},
+  {id:'g04',cn:'怪物猎人 世界:冰原',en:'MH World Iceborne',dev:'Capcom',pub:'Capcom',y:2019,pf:'PS4/Xbox/PC',sc:9.2,g:['动作','狩猎','多人'],cv:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="%235DADE2" width="64" height="64"/><text x="32" y="38" text-anchor="middle" fill="white" font-size="10">冰原</text></svg>',sp:'前往永霜冻土。冰咒龙、黑龙——猎人的新大陆冒险继续。超越本体的超大型DLC。'},
+  {id:'g05',cn:'怪物猎人 崛起',en:'MH Rise',dev:'Capcom',pub:'Capcom',y:2021,pf:'Switch/PC/PS5',sc:8.7,g:['动作','狩猎','多人'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202212/0700/mQ5sAnL01gR1JhfAX0b9N0jj.png',sp:'炎火村的猎人。翔虫、操龙——带来全新狩猎体验。和风怪物猎人的回归之作。'},
+  {id:'g06',cn:'怪物猎人 崛起:曙光',en:'MH Rise Sunbreak',dev:'Capcom',pub:'Capcom',y:2022,pf:'Switch/PC/PS5',sc:8.9,g:['动作','狩猎','多人'],cv:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="%239B59B6" width="64" height="64"/><text x="32" y="38" text-anchor="middle" fill="white" font-size="10">曙光</text></svg>',sp:'观测据点埃尔加德。爵银龙——崛起故事的终结章。'},
+  {id:'g07',cn:'怪物猎人 荒野',en:'MH Wilds',dev:'Capcom',pub:'Capcom',y:2025,pf:'PS5/Xbox/PC',sc:8.8,g:['动作','狩猎','多人'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202409/1904/5e29bf7ecbd0ebdd7fcc5b185443d52b2185af27ab8cbd84.png',sp:'全新大陆禁足地。无缝狩猎新时代。天气、生态——一切都在动态流转。2025年最新作。'},
+  /* ── Key ── */
+  {id:'g08',cn:'CLANNAD',en:'CLANNAD',dev:'Key',pub:'Visual Arts',y:2004,pf:'PC/Switch/PS4',sc:9.3,g:['视觉小说','催泪','校园'],cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',sp:'Key社催泪三部曲之顶点。在樱花坡道上冈崎朋也遇到了古河渚。关于家族、爱与成长的故事。'},
+];
+
+const devOrder = ['FromSoftware','Capcom','Key'];
+const groups = {};
+DB.forEach(g => {
+  if(!groups[g.dev])groups[g.dev]=[];
+  groups[g.dev].push(g);
+  if(!devOrder.includes(g.dev))devOrder.push(g.dev);
+});
+for(const d in groups)groups[d].sort((a,b)=>a.y-b.y);
+
+const root = document.getElementById('gameRoot');
+const overlay = document.getElementById('modalOverlay');
+devOrder.forEach(dev=>{
+  const items=groups[dev];if(!items)return;
+  const sec=document.createElement('div');sec.className='dev-section';
+  sec.innerHTML=`<div class="dev-head">${dev}<small>${items.length} 款</small></div><div class="game-grid"></div>`;
+  root.appendChild(sec);
+  const head=sec.querySelector('.dev-head'),grid=sec.querySelector('.game-grid');
+  head.addEventListener('click',()=>{head.classList.toggle('collapsed');grid.style.display=grid.style.display==='none'?'':'none';});
+  items.forEach(g=>{
+    const card=document.createElement('div');card.className='game-card';
+    let sub=`<span>${g.y}</span><span>${g.pf}</span><span>${g.dev}</span>`;
+    card.innerHTML=`<img class="game-cover" src="${g.cv}" alt="${g.cn}" loading="lazy" onerror="this.style.background='#E8D5B8'"><div class="game-meta"><span class="game-title">${g.cn}</span><div class="game-sub">${sub}</div></div>`;
+    card.addEventListener('click',()=>openModal(g));grid.appendChild(card);
+  });
+});
+function openModal(g){
+  document.getElementById('modalCover').src=g.cv;
+  document.getElementById('modalTitle').textContent=g.cn;
+  document.getElementById('modalMeta').innerHTML=`<span>📅 ${g.y}</span><span>💻 ${g.pf}</span><span>🏢 ${g.dev}</span><span>📀 ${g.pub}</span><span class="modal-score">⭐ ${g.sc}</span><span>${g.g.join(' · ')}</span>`;
+  document.getElementById('modalSynopsis').textContent=g.sp;
+  overlay.classList.add('active');document.body.style.overflow='hidden';
+}
+function closeModal(){overlay.classList.remove('active');document.body.style.overflow='';}
+document.getElementById('modalClose').addEventListener('click',closeModal);
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
 
   <script src="../js/guide-characters.js"></script>
   <script src="../js/guide-widget.js"></script>
