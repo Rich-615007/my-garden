@@ -117,10 +117,23 @@
 
 <script>
 // ========== 漫画数据库 ==========
-const DB = [];
+const DB = [
+  /* ── 周刊少年Jump ── */
+  {id:'m01',cn:'Dr.STONE',en:'Dr.STONE',mag:'周刊少年Jump',y:2017,v:27,c:236,sc:8.1,author:'稻垣理一郎',artist:'Boichi',st:'已完结',g:['科幻','冒险','喜剧'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/b98416-L44f4idEGMAX.jpg',sp:'全人类瞬间石化。数千年后天才少年石神千空复活。从零开始重建文明。全27卷已完结。'},
+  {id:'m02',cn:'Dr.STONE reboot:百夜',en:'Dr.STONE reboot',mag:'周刊少年Jump',y:2019,v:1,c:9,sc:7.6,author:'稻垣理一郎',artist:'Boichi',st:'已完结',g:['科幻','冒险'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx112673-ppxmIwBve158.jpg',sp:'百夜——千空的亲生父亲。石化的那一天他在宇宙空间站上。外传讲述千空之父的故事。'},
+  {id:'m03',cn:'电锯人',en:'Chainsaw Man',mag:'周刊少年Jump',y:2018,v:24,c:232,sc:8.5,author:'藤本树',artist:'藤本树',st:'连载中',g:['动作','奇幻','剧情'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx105778-euxXZEIfDY2u.png',sp:'欠债少年淀治与电锯恶魔波奇塔融合成为恶魔猎人。藤本树的疯狂与天才之作。'},
+  {id:'m04',cn:'JoJo 幻影之血',en:'JoJo Phantom Blood',mag:'周刊少年Jump',y:1986,v:5,c:44,sc:7.0,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx31517-Y3pL6OTH74Iq.png',sp:'19世纪英国。乔纳森与Dio的宿命对决。波纹气功石鬼面。一切从这里开始。'},
+  {id:'m05',cn:'JoJo 不灭钻石',en:'JoJo Diamond',mag:'周刊少年Jump',y:1992,v:18,c:174,sc:8.4,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx33006-uFu4BInfxXNx.png',sp:'第四部。东方仗助在杜王町。替身能力进化到新高度。吉良吉影——只想平静生活的连环杀手。'},
+  {id:'m06',cn:'JoJo 黄金之风',en:'JoJo Golden Wind',mag:'周刊少年Jump',y:1995,v:17,c:155,sc:8.0,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx33008-HBnMTIGwREaV.png',sp:'第五部。乔鲁诺加入黑帮目标是黑帮之星。意大利风替身战斗的巅峰。'},
+  {id:'m07',cn:'JoJo 石之海',en:'JoJo Stone Ocean',mag:'周刊少年Jump',y:1999,v:17,c:158,sc:8.2,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx33009-jF9dqLJcZC4n.png',sp:'第六部。空条徐伦被陷害入狱绿海豚监狱。乔斯达家族百年宿命的终结。'},
+  {id:'m08',cn:'JoJo 飙马野郎',en:'JoJo Steel Ball Run',mag:'Ultra Jump',y:2004,v:24,c:95,sc:9.2,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx31706-lRncu9VbcBB7.png',sp:'第七部平行世界。横跨美国的赛马大赛。乔尼与杰洛。JOJO史上最高评分9.2。'},
+  {id:'m09',cn:'JoJo JoJolion',en:'JoJo JoJolion',mag:'Ultra Jump',y:2011,v:27,c:110,sc:8.5,author:'荒木飞吕彦',artist:'荒木飞吕彦',st:'已完结',g:['动作','冒险','奇幻'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx55515-HhCsfAsd7VK1.png',sp:'第八部。杜王町的诅咒。东方定助失去了记忆。JoJolion意为被祝福的JoJo。'},
+  /* ── 电击魔王 ── */
+  {id:'m10',cn:'人妻女教师被女高中生迷得神魂颠倒',en:'Hitozuma Kyoushi',mag:'电击魔王',y:2025,v:0,c:0,sc:5.9,author:'入间人间',artist:'?',st:'连载中',g:['恋爱','校园','喜剧'],cv:'https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/bx196670-ZUidu9NCsjaW.jpg',sp:'人妻女教师被女高中生迷得神魂颠倒。入间人间的百合漫画新作。教师与学生的禁断恋爱。'},
+];
 
 // ========== 按杂志分组 ==========
-const magOrder = [];
+const magOrder = ['电击魔王','Ultra Jump','周刊少年Jump',];
 const groups = {};
 DB.forEach(m => {
   const mag = m.mag;
