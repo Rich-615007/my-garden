@@ -88,16 +88,16 @@
 <script>
 const DB = [
   /* ── FromSoftware ── */
-  {id:'g01',cn:'艾尔登法环',en:'Elden Ring',dev:'FromSoftware',pub:'Bandai Namco',y:2022,pf:'PS5/PS4/Xbox/PC',sc:9.6,g:['开放世界','动作RPG','奇幻'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/1245620/header.jpg',sp:'褪色者啊，在狭间之地追寻艾尔登法环。乔治RR马丁与宫崎英高的合作之作。开放世界魂系巅峰。'},
-  {id:'g02',cn:'艾尔登法环 黄金树幽影',en:'Elden Ring SotE',dev:'FromSoftware',pub:'Bandai Namco',y:2024,pf:'PS5/Xbox/PC',sc:9.2,g:['开放世界','动作RPG','奇幻'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202402/2112/0ba49bbbc0d1ec6e6a28a30f2e7020e0a87e3fc4f0d43380.png',sp:'前往幽影之地。追寻米凯拉的足迹。规模超越本体的超大型DLC。'},
+  {id:'g01',cn:'艾尔登法环',en:'Elden Ring',dev:'FromSoftware',pub:'Bandai Namco',y:2022,pf:'PS5/Xbox/PC',sc:9.6,g:['开放世界','动作RPG','奇幻'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/1245620/header.jpg',sp:'褪色者啊，在狭间之地追寻艾尔登法环。乔治RR马丁与宫崎英高的合作之作。开放世界魂系巅峰。',
+   dlc:[{cn:'黄金树幽影',y:2024,pf:'PS5/Xbox/PC',sc:9.2}]},
   /* ── Capcom ── */
-  {id:'g03',cn:'怪物猎人 世界',en:'MH World',dev:'Capcom',pub:'Capcom',y:2018,pf:'PS4/Xbox/PC',sc:9.0,g:['动作','狩猎','多人'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/582010/header.jpg',sp:'新大陆的猎人之星。Capcom历史上最高销量的单一作品。生态系狩猎的革新之作。'},
-  {id:'g04',cn:'怪物猎人 世界:冰原',en:'MH World Iceborne',dev:'Capcom',pub:'Capcom',y:2019,pf:'PS4/Xbox/PC',sc:9.2,g:['动作','狩猎','多人'],cv:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="%232E86C1" width="64" height="64"/><text x="32" y="38" text-anchor="middle" fill="white" font-size="10">冰原</text></svg>',sp:'前往永霜冻土。冰咒龙、黑龙——猎人的新大陆冒险继续。超越本体的超大型DLC。'},
-  {id:'g05',cn:'怪物猎人 崛起',en:'MH Rise',dev:'Capcom',pub:'Capcom',y:2021,pf:'Switch/PC/PS5',sc:8.7,g:['动作','狩猎','多人'],cv:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="%23CB4335" width="64" height="64"/><text x="32" y="38" text-anchor="middle" fill="white" font-size="10">崛起</text></svg>',sp:'炎火村的猎人。翔虫、操龙——带来全新狩猎体验。和风怪物猎人的回归之作。'},
-  {id:'g06',cn:'怪物猎人 崛起:曙光',en:'MH Rise Sunbreak',dev:'Capcom',pub:'Capcom',y:2022,pf:'Switch/PC/PS5',sc:8.9,g:['动作','狩猎','多人'],cv:'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="%239B59B6" width="64" height="64"/><text x="32" y="38" text-anchor="middle" fill="white" font-size="10">曙光</text></svg>',sp:'观测据点埃尔加德。爵银龙——崛起故事的终结章。'},
-  {id:'g07',cn:'怪物猎人 荒野',en:'MH Wilds',dev:'Capcom',pub:'Capcom',y:2025,pf:'PS5/Xbox/PC',sc:8.8,g:['动作','狩猎','多人'],cv:'https://image.api.playstation.com/vulcan/ap/rnd/202409/1904/5e29bf7ecbd0ebdd7fcc5b185443d52b2185af27ab8cbd84.png',sp:'全新大陆禁足地。无缝狩猎新时代。天气、生态——一切都在动态流转。2025年最新作。'},
+  {id:'g03',cn:'怪物猎人 世界',en:'MH World',dev:'Capcom',pub:'Capcom',y:2018,pf:'PS4/Xbox/PC',sc:9.0,g:['动作','狩猎','多人'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/582010/header.jpg',sp:'新大陆的猎人之星。Capcom历史最高销量的单作。生态系狩猎革新。',
+   dlc:[{cn:'冰原',y:2019,pf:'PS4/Xbox/PC',sc:9.2,sp:'永霜冻土。冰咒龙、黑龙——猎人的新大陆冒险继续。'}]},
+  {id:'g05',cn:'怪物猎人 崛起',en:'MH Rise',dev:'Capcom',pub:'Capcom',y:2021,pf:'Switch/PC/PS5',sc:8.7,g:['动作','狩猎','多人'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/1446780/header.jpg',sp:'炎火村的猎人。翔虫、操龙——全新狩猎体验。和风怪物猎人回归。',
+   dlc:[{cn:'曙光',y:2022,pf:'Switch/PC/PS5',sc:8.9,sp:'观测据点埃尔加德。爵银龙——崛起故事的终结。'}]},
+  {id:'g07',cn:'怪物猎人 荒野',en:'MH Wilds',dev:'Capcom',pub:'Capcom',y:2025,pf:'PS5/Xbox/PC',sc:8.8,g:['动作','狩猎','多人'],cv:'https://steamcdn-a.akamaihd.net/steam/apps/2246340/header.jpg',sp:'全新大陆禁足地。无缝狩猎新时代。天气、生态——一切动态流转。2025年最新作。'},
   /* ── Key ── */
-  {id:'g08',cn:'CLANNAD',en:'CLANNAD',dev:'Key',pub:'Visual Arts',y:2004,pf:'PC/Switch/PS4',sc:9.3,g:['视觉小说','催泪','校园'],cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',sp:'Key社催泪三部曲之顶点。在樱花坡道上冈崎朋也遇到了古河渚。关于家族、爱与成长的故事。'},
+  {id:'g08',cn:'CLANNAD',en:'CLANNAD',dev:'Key',pub:'Visual Arts',y:2004,pf:'PC/Switch/PS4',sc:9.3,g:['视觉小说','催泪','校园'],cv:'https://cdn.myanimelist.net/images/anime/1299/110774l.jpg',sp:'Key社催泪三部曲之顶点。樱花坡道上冈崎朋也遇到了古河渚。关于家族、爱与成长。'},
 ];
 
 const devOrder = ['FromSoftware','Capcom','Key'];
@@ -121,6 +121,7 @@ devOrder.forEach(dev=>{
   items.forEach(g=>{
     const card=document.createElement('div');card.className='game-card';
     let sub=`<span>${g.y}</span><span>${g.pf}</span><span>${g.dev}</span>`;
+    if(g.dlc) sub+=`<span>+DLC</span>`;
     card.innerHTML=`<img class="game-cover" src="${g.cv}" alt="${g.cn}" loading="lazy" onerror="this.style.background='#E8D5B8'"><div class="game-meta"><span class="game-title">${g.cn}</span><div class="game-sub">${sub}</div></div>`;
     card.addEventListener('click',()=>openModal(g));grid.appendChild(card);
   });
@@ -128,8 +129,13 @@ devOrder.forEach(dev=>{
 function openModal(g){
   document.getElementById('modalCover').src=g.cv;
   document.getElementById('modalTitle').textContent=g.cn;
-  document.getElementById('modalMeta').innerHTML=`<span>📅 ${g.y}</span><span>💻 ${g.pf}</span><span>🏢 ${g.dev}</span><span>📀 ${g.pub}</span><span class="modal-score">⭐ ${g.sc}</span><span>${g.g.join(' · ')}</span>`;
-  document.getElementById('modalSynopsis').textContent=g.sp;
+  let meta=`<span>📅 ${g.y}</span><span>💻 ${g.pf}</span><span>🏢 ${g.dev}</span><span>📀 ${g.pub}</span><span class="modal-score">⭐ ${g.sc}</span><span>${g.g.join(' · ')}</span>`;
+  let sp=g.sp;
+  if(g.dlc){ meta+='<span style="background:rgba(200,150,80,0.2);color:#B07030">📦 DLC</span>';
+    g.dlc.forEach(d=>{ sp+=`\n\n✦ ${d.cn} (${d.y}, ${d.pf}, ⭐${d.sc})`; if(d.sp)sp+=`\n${d.sp}`; });
+  }
+  document.getElementById('modalMeta').innerHTML=meta;
+  document.getElementById('modalSynopsis').textContent=sp;
   overlay.classList.add('active');document.body.style.overflow='hidden';
 }
 function closeModal(){overlay.classList.remove('active');document.body.style.overflow='';}
