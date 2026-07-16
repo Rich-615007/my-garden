@@ -15,6 +15,7 @@ let state = {
   character: GUIDE_DEFAULT,
   collapsed: true,
   muted: false,
+  aiMode: false,
   history: [],
   lastTalk: 0,
   guideSeen: false,
@@ -28,12 +29,13 @@ function loadState() {
     state.collapsed = s.collapsed !== false;
     state.muted = s.muted || false;
     state.lastTalk = s.lastTalk || 0;
+    state.aiMode = s.aiMode || false;
     state.guideSeen = s.guideSeen || false;
   } catch(e) {}
 }
 function saveState() {
-  const { character, collapsed, muted, lastTalk, guideSeen } = state;
-  localStorage.setItem('guide-state', JSON.stringify({character,collapsed,muted,lastTalk,guideSeen}));
+  const { character, collapsed, muted, aiMode, lastTalk, guideSeen } = state;
+  localStorage.setItem('guide-state', JSON.stringify({character,collapsed,muted,aiMode,lastTalk,guideSeen}));
 }
 
 /* ── 获取角色 ── */
@@ -162,20 +164,19 @@ function createWidget() {
   footer.appendChild(muteBtn);
   widgetEl.appendChild(footer);
 
-  // 输入框
+  // AI输入框
   const inputBar = document.createElement('div');
-  inputBar.style.cssText = 'display:flex;gap:6px;padding:6px 12px;border-top:1px solid rgba(180,150,120,0.08);';
-  const input = document.createElement('input');
-  input.id = 'guide-input';
-  input.placeholder = '输入关键词...';
+  inputBar.style.cssText = 'display:flex;gap:4px;padding:4px 10px 8px;border-top:1px solid rgba(180,150,120,0.08);';
+  const aiToggle = document.createElement('button'); aiToggle.id='guide-ai-toggle'; aiToggle.textContent='🤖'; aiToggle.title='切换AI对话';
+  aiToggle.style.cssText = 'padding:4px 8px;border-radius:14px;border:1px solid rgba(180,150,120,0.3);background:rgba(250,245,235,0.6);font-size:14px;cursor:pointer;';
+  aiToggle.onclick = toggleAIMode;
+  if(state.aiMode){aiToggle.style.background='rgba(200,150,80,0.3)';aiToggle.style.borderColor='rgba(200,150,80,0.5)';aiToggle.textContent='✨';}
+  const input = document.createElement('input'); input.id='guide-input'; input.placeholder=state.aiMode?'🤖 AI对话...':'输入关键词...';
   input.style.cssText = 'flex:1;padding:6px 10px;border-radius:16px;border:1px solid rgba(180,150,120,0.3);background:rgba(250,245,235,0.6);font-size:12px;font-family:inherit;outline:none;color:#4A3728;';
-  const sendBtn = document.createElement('button');
-  sendBtn.textContent = '发送';
+  const sendBtn = document.createElement('button'); sendBtn.textContent='发送';
   sendBtn.style.cssText = 'padding:6px 12px;border-radius:16px;border:none;background:rgba(200,160,100,0.3);color:#4A3728;font-size:12px;cursor:pointer;font-family:inherit;';
-  sendBtn.onclick = handleUserInput;
-  input.onkeydown = (e) => { if(e.key === 'Enter') handleUserInput(); };
-  inputBar.appendChild(input);
-  inputBar.appendChild(sendBtn);
+  sendBtn.onclick=handleUserInput; input.onkeydown=(e)=>{if(e.key==='Enter')handleUserInput();};
+  inputBar.appendChild(aiToggle); inputBar.appendChild(input); inputBar.appendChild(sendBtn);
   widgetEl.appendChild(inputBar);
 
   // 收起态预览行
@@ -381,32 +382,40 @@ function startIdleTimer() {
 
 /* ── 用户输入 ── */
 
-function handleUserInput() {
-  const input = document.getElementById('guide-input');
-  if (!input) return;
-  const txt = input.value.trim();
-  if (!txt) return;
-  input.value = '';
-  addMessage(txt, 'user');
-  const cd = charData();
-  const replies = cd.replies;
-  if (!replies) { addMessage('嗯。', 'char'); return; }
-
-  // 长关键词优先匹配
-  const keys = Object.keys(replies);
-  keys.sort((a,b) => b.length - a.length);
-  let matched = null;
-  for (const key of keys) {
-    if (txt.includes(key)) { matched = key; break; }
-  }
-  if (matched) {
-    setTimeout(() => addMessage(replies[matched], 'char'), 800);
-  } else {
-    const fallback = cd.idleTalks[Math.floor(Math.random() * cd.idleTalks.length)];
-    setTimeout(() => addMessage(fallback, 'char'), 800);
-  }
-  state.lastTalk = Date.now();
+function toggleAIMode() {
+  state.aiMode=!state.aiMode;
+  const btn=document.getElementById('guide-ai-toggle'); const input=document.getElementById('guide-input');
+  if(btn){btn.style.background=state.aiMode?'rgba(200,150,80,0.35)':'rgba(250,245,235,0.6)';btn.style.borderColor=state.aiMode?'rgba(200,150,80,0.6)':'rgba(180,150,120,0.3)';btn.textContent=state.aiMode?'✨':'🤖';}
+  if(input)input.placeholder=state.aiMode?'🤖 AI对话...':'输入关键词...';
   saveState();
+}
+
+async function handleUserInput() {
+  const input=document.getElementById('guide-input'); if(!input)return;
+  const txt=input.value.trim(); if(!txt)return; input.value=''; addMessage(txt,'user');
+  if(state.aiMode){
+    const thinking=addMsgTemp('思考中...','char');
+    try{const reply=await callAI(txt); if(thinking&&thinking.parentNode)thinking.remove(); addMessage(reply,'char');}
+    catch(e){if(thinking&&thinking.parentNode)thinking.remove(); addMessage('唔...现在说不了话。','char');}
+  }else{
+    const cd=charData(); const replies=cd.replies; if(!replies){addMessage('嗯。','char');return;}
+    const keys=Object.keys(replies); keys.sort((a,b)=>b.length-a.length); let m=null;
+    for(const k of keys){if(txt.includes(k)){m=k;break;}}
+    setTimeout(()=>{if(m)addMessage(replies[m],'char');else addMessage(cd.idleTalks[Math.floor(Math.random()*cd.idleTalks.length)],'char');},800);
+  }
+  state.lastTalk=Date.now(); saveState();
+}
+
+function addMsgTemp(text,role){if(state.collapsed)return null;const el=document.createElement('div');el.style.cssText='max-width:85%;padding:6px 10px;border-radius:10px;font-size:12px;line-height:1.5;align-self:flex-start;background:rgba(200,160,100,0.12);color:#4A3728;';el.textContent=text;bodyEl.appendChild(el);bodyEl.scrollTop=bodyEl.scrollHeight;return el;}
+
+async function callAI(userMsg){
+  let key=localStorage.getItem('openrouter-key');
+  if(!key){key=prompt('首次使用AI：请输入OpenRouter API Key（从 openrouter.ai/keys 免费获取）：');if(!key)return'需要API Key。请注册OpenRouter免费获取。';localStorage.setItem('openrouter-key',key.trim());}
+  const sp=GUIDE_SYSTEM_PROMPTS[state.character]||'';
+  const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'google/gemini-2.0-flash-001',messages:[{role:'system',content:sp},{role:'user',content:userMsg}],max_tokens:150,temperature:0.8})});
+  const d=await r.json();
+  if(d.error)return'说不了话（'+d.error.message.slice(0,60)+'）';
+  return d.choices[0].message.content||'...';
 }
 
 
