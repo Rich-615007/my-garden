@@ -6,7 +6,7 @@ REPO = r'C:\Users\HP\Desktop\娱乐的东西\我的个人网站'
 JS_DIR = os.path.join(REPO, 'js')
 CHARS_FILE = os.path.join(JS_DIR, 'guide-characters.js')
 WIDGET_FILE = os.path.join(JS_DIR, 'guide-widget.js')
-PAGES = ['index.html','anime/index.html','manga/index.html','novel/index.html',
+PAGES = ['index.html','anime/index.html','manga/index.html','game/index.html',
          'lightnovel/index.html','music/index.html','create/index.html','about/index.html']
 
 def shell(cmd, cwd=REPO):

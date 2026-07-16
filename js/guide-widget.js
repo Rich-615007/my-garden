@@ -44,7 +44,7 @@ function pageKey() {
   const p = window.location.pathname.toLowerCase();
   if (p.includes('/anime/'))    return '/anime/';
   if (p.includes('/manga/'))    return '/manga/';
-  if (p.includes('/novel/'))    return '/novel/';
+  if (p.includes('/game/'))     return '/game/';
   if (p.includes('/music/'))    return '/music/';
   if (p.includes('/lightnovel/')) return '/lightnovel/';
   if (p.includes('/create/'))   return '/create/';
@@ -231,7 +231,7 @@ function resolvePath(target) {
     && !window.location.pathname.includes('/music/')
     && !window.location.pathname.includes('/lightnovel/')
     && !window.location.pathname.includes('/manga/')
-    && !window.location.pathname.includes('/novel/')
+    && !window.location.pathname.includes('/game/')
     && !window.location.pathname.includes('/create/')
     && !window.location.pathname.includes('/about/');
   // 从子页面跳转需要加 ../
@@ -247,7 +247,8 @@ function handleQuickReply(txt) {
     { match: ['📺','看番','追番','动漫'], target: 'anime/', reply: { '古河渚':'追番页在那边~','立华奏':'。','忍野忍':'哼，随汝去看。' }},
     { match: ['📝','轻小说','小说'], target: 'lightnovel/', reply: { '古河渚':'轻小说区~有很多好书。','立华奏':'。','忍野忍':'轻小说在这边。' }},
     { match: ['🎵','听歌','音乐'], target: 'music/', reply: { '古河渚':'音乐区~希望你喜欢。','立华奏':'。','忍野忍':'去听。' }},
-    { match: ['🎮','创作','游戏'], target: 'create/', reply: { '古河渚':'创作区~看看他在做什么吧。','立华奏':'。','忍野忍':'他在这做游戏。' }},
+    { match: ['创作','心穴'], target: 'create/', reply: { '古河渚':'创作区~看看他在做什么吧。','立华奏':'。','忍野忍':'他在这做游戏。' }},
+    { match: ['🎮','游戏'], target: 'game/', reply: { '古河渚':'游戏区~看看他玩过的世界吧。','立华奏':'。','忍野忍':'哼，去狩猎吧。' }},
   ];
 
   setTimeout(() => {
