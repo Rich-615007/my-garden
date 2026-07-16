@@ -82,15 +82,13 @@ function createPet() {
   container.appendChild(label);
   document.body.appendChild(container);
 
-  // 呼吸动画
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes pet-breathe {
-      0%,100% { transform:translateY(0); }
-      50%     { transform:translateY(-4px); }
-    }
-  `;
-  document.head.appendChild(style);
+  // 呼吸动画 (只注入一次)
+  if (!document.getElementById('pet-breathe-keyframes')) {
+    const style = document.createElement('style');
+    style.id = 'pet-breathe-keyframes';
+    style.textContent = `@keyframes pet-breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}`;
+    document.head.appendChild(style);
+  }
 
   if (petState.hidden) container.style.display = 'none';
   return container;
@@ -122,14 +120,13 @@ function showBubble(text, isSpecial) {
   `;
   bubble.textContent = text;
 
-  const animStyle = document.createElement('style');
-  animStyle.textContent = `
-    @keyframes pet-bubble-in {
-      from { opacity:0; transform:translateY(6px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-  `;
-  document.head.appendChild(animStyle);
+  // 防止重复注入动画定义
+  if (!document.getElementById('pet-bubble-keyframes')) {
+    const animStyle = document.createElement('style');
+    animStyle.id = 'pet-bubble-keyframes';
+    animStyle.textContent = `@keyframes pet-bubble-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}`;
+    document.head.appendChild(animStyle);
+  }
   document.body.appendChild(bubble);
 
   setTimeout(() => {
@@ -184,6 +181,7 @@ function initDrag(container) {
       dragging = false;
       container.style.cursor = 'grab';
       saveState();
+      clickTimer = null; // P1-5: 拖拽后重置双击计时器
     }
   });
 
