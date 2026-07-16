@@ -43,6 +43,8 @@ function charData() { return GUIDE_CHARS[state.character] || GUIDE_CHARS[GUIDE_D
 function pageKey() {
   const p = window.location.pathname.toLowerCase();
   if (p.includes('/anime/'))    return '/anime/';
+  if (p.includes('/manga/'))    return '/manga/';
+  if (p.includes('/novel/'))    return '/novel/';
   if (p.includes('/music/'))    return '/music/';
   if (p.includes('/lightnovel/')) return '/lightnovel/';
   if (p.includes('/create/'))   return '/create/';
@@ -214,34 +216,24 @@ function handleQuickReply(txt) {
   addMessage(txt, 'user');
   const cd = charData();
 
-  // 根据快捷回复内容决定跳转
-  const routes = {
-    '📺 看番': ['anime/', '追番页在那边~'],
-    '📺 追番': ['anime/', '145部番等着你呢~'],
-    '📺 动漫': ['anime/', '哼，随汝去看。'],
-    '📺': ['anime/', '。'],
-    '📝 轻小说': ['lightnovel/', '轻小说区~有很多好书哦。'],
-    '📝 小说': ['lightnovel/', '轻小说在这边。'],
-    '📝': ['lightnovel/', '。'],
-    '🎵 听歌': ['music/', '音乐区~希望你喜欢。'],
-    '🎵 音乐': ['music/', '有很多动画的OST。'],
-    '🎵': ['music/', '。'],
-    '🎮 创作': ['create/', '创作区~看看他在做什么吧。'],
-    '🎮 游戏': ['create/', '心穴在创作区。'],
-    '🎮': ['create/', '。'],
-  };
+  // 直接URL映射 (防emoji空字符串匹配bug)
+  const urlMap = [
+    { match: ['📺','看番','追番','动漫'], target: 'anime/', reply: { '古河渚':'追番页在那边~','立华奏':'。','忍野忍':'哼，随汝去看。' }},
+    { match: ['📝','轻小说','小说'], target: 'lightnovel/', reply: { '古河渚':'轻小说区~有很多好书。','立华奏':'。','忍野忍':'轻小说在这边。' }},
+    { match: ['🎵','听歌','音乐'], target: 'music/', reply: { '古河渚':'音乐区~希望你喜欢。','立华奏':'。','忍野忍':'去听。' }},
+    { match: ['🎮','创作','游戏'], target: 'create/', reply: { '古河渚':'创作区~看看他在做什么吧。','立华奏':'。','忍野忍':'他在这做游戏。' }},
+  ];
 
   setTimeout(() => {
-    let replied = false;
-    for (const [key, [target, reply]] of Object.entries(routes)) {
-      if (txt.includes(key.replace(/[📺📝🎵🎮]/g,'').trim())) {
-        addMessage(reply, 'char');
-        setTimeout(() => { window.location.href = target; }, 800);
-        replied = true;
-        break;
-      }
+    let found = null;
+    for (const { match, target, reply } of urlMap) {
+      if (match.some(m => txt.includes(m))) { found = { target, reply }; break; }
     }
-    if (!replied) {
+    if (found) {
+      const r = found.reply[state.character] || found.reply[GUIDE_DEFAULT];
+      addMessage(r, 'char');
+      setTimeout(() => { window.location.href = found.target; }, 800);
+    } else {
       const msg = cd.idleTalks[Math.floor(Math.random() * cd.idleTalks.length)];
       addMessage(msg, 'char');
     }
