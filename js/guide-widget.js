@@ -412,7 +412,7 @@ async function callAI(userMsg){
   let key=localStorage.getItem('openrouter-key');
   if(!key){key=prompt('首次使用AI：请输入OpenRouter API Key（从 openrouter.ai/keys 免费获取）：');if(!key)return'需要API Key。请注册OpenRouter免费获取。';localStorage.setItem('openrouter-key',key.trim());}
   const sp=GUIDE_SYSTEM_PROMPTS[state.character]||'';
-  const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'google/gemini-2.5-flash',messages:[{role:'system',content:sp},{role:'user',content:userMsg}],max_tokens:150,temperature:0.8})});
+  const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},body:JSON.stringify({model:'openrouter/free',messages:[{role:'system',content:sp},{role:'user',content:userMsg}],max_tokens:150,temperature:0.8})});
   const d=await r.json();
   if(d.error)return'说不了话（'+d.error.message.slice(0,60)+'）';
   return d.choices[0].message.content||'...';
