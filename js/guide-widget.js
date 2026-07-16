@@ -65,8 +65,8 @@ function createWidget() {
   widgetEl.id = 'guide-widget';
   widgetEl.style.cssText = `
     position:fixed; z-index:${Z}; right:12px; bottom:12px;
-    width:${state.collapsed ? 'auto' : '280px'};
-    max-height:${state.collapsed ? 'auto' : '420px'};
+    width:${state.collapsed ? 'auto' : '320px'};
+    max-height:${state.collapsed ? 'auto' : '480px'};
     background:rgba(255,252,246,0.96); border-radius:14px;
     box-shadow:0 4px 24px rgba(60,30,10,0.15);
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -103,7 +103,7 @@ function createWidget() {
   bodyEl.id = 'guide-body';
   bodyEl.style.cssText = `
     padding:10px 12px; overflow-y:auto;
-    max-height:260px; min-height:40px;
+    max-height:300px; min-height:60px;
     display:flex; flex-direction:column; gap:6px;
     display:${state.collapsed ? 'none' : 'flex'};
   `;
@@ -212,11 +212,26 @@ function toggleMute() {
   refreshWidget();
 }
 
+function resolvePath(target) {
+  // 根据当前页面深度自动修正路径
+  const depth = (window.location.pathname.match(/\//g) || []).length;
+  // depth=2 means /my-garden/, depth=3 means /my-garden/anime/ etc
+  const isRoot = !window.location.pathname.includes('/anime/')
+    && !window.location.pathname.includes('/music/')
+    && !window.location.pathname.includes('/lightnovel/')
+    && !window.location.pathname.includes('/manga/')
+    && !window.location.pathname.includes('/novel/')
+    && !window.location.pathname.includes('/create/')
+    && !window.location.pathname.includes('/about/');
+  // 从子页面跳转需要加 ../
+  const prefix = (isRoot || window.location.pathname.endsWith('/my-garden/')) ? '' : '../';
+  return prefix + target;
+}
+
 function handleQuickReply(txt) {
   addMessage(txt, 'user');
   const cd = charData();
 
-  // 直接URL映射 (防emoji空字符串匹配bug)
   const urlMap = [
     { match: ['📺','看番','追番','动漫'], target: 'anime/', reply: { '古河渚':'追番页在那边~','立华奏':'。','忍野忍':'哼，随汝去看。' }},
     { match: ['📝','轻小说','小说'], target: 'lightnovel/', reply: { '古河渚':'轻小说区~有很多好书。','立华奏':'。','忍野忍':'轻小说在这边。' }},
@@ -232,7 +247,8 @@ function handleQuickReply(txt) {
     if (found) {
       const r = found.reply[state.character] || found.reply[GUIDE_DEFAULT];
       addMessage(r, 'char');
-      setTimeout(() => { window.location.href = found.target; }, 800);
+      const path = resolvePath(found.target);
+      setTimeout(() => { window.location.href = path; }, 800);
     } else {
       const msg = cd.idleTalks[Math.floor(Math.random() * cd.idleTalks.length)];
       addMessage(msg, 'char');
