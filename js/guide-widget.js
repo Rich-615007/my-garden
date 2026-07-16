@@ -68,7 +68,7 @@ function createWidget() {
   widgetEl.style.cssText = `
     position:fixed; z-index:${Z}; right:12px; bottom:12px;
     width:${state.collapsed ? 'auto' : '340px'};
-    max-height:${state.collapsed ? 'auto' : '1000px'};
+    max-height:${state.collapsed ? 'auto' : '1600px'};
     background:rgba(255,252,246,0.96); border-radius:14px;
     box-shadow:0 4px 24px rgba(60,30,10,0.15);
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -105,7 +105,7 @@ function createWidget() {
   bodyEl.id = 'guide-body';
   bodyEl.style.cssText = `
     padding:10px 12px; overflow-y:auto;
-    max-height:900px; min-height:80px;
+    max-height:1350px; min-height:80px;
     display:flex; flex-direction:column; gap:6px;
     display:${state.collapsed ? 'none' : 'flex'};
   `;
