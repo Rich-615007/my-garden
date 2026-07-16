@@ -65,8 +65,8 @@ function createWidget() {
   widgetEl.id = 'guide-widget';
   widgetEl.style.cssText = `
     position:fixed; z-index:${Z}; right:12px; bottom:12px;
-    width:${state.collapsed ? 'auto' : '320px'};
-    max-height:${state.collapsed ? 'auto' : '480px'};
+    width:${state.collapsed ? 'auto' : '340px'};
+    max-height:${state.collapsed ? 'auto' : '700px'};
     background:rgba(255,252,246,0.96); border-radius:14px;
     box-shadow:0 4px 24px rgba(60,30,10,0.15);
     font-family:"PingFang SC","Microsoft YaHei",sans-serif;
@@ -103,7 +103,7 @@ function createWidget() {
   bodyEl.id = 'guide-body';
   bodyEl.style.cssText = `
     padding:10px 12px; overflow-y:auto;
-    max-height:300px; min-height:60px;
+    max-height:450px; min-height:80px;
     display:flex; flex-direction:column; gap:6px;
     display:${state.collapsed ? 'none' : 'flex'};
   `;
@@ -161,6 +161,22 @@ function createWidget() {
   footer.appendChild(tourBtn);
   footer.appendChild(muteBtn);
   widgetEl.appendChild(footer);
+
+  // 输入框
+  const inputBar = document.createElement('div');
+  inputBar.style.cssText = 'display:flex;gap:6px;padding:6px 12px;border-top:1px solid rgba(180,150,120,0.08);';
+  const input = document.createElement('input');
+  input.id = 'guide-input';
+  input.placeholder = '输入关键词...';
+  input.style.cssText = 'flex:1;padding:6px 10px;border-radius:16px;border:1px solid rgba(180,150,120,0.3);background:rgba(250,245,235,0.6);font-size:12px;font-family:inherit;outline:none;color:#4A3728;';
+  const sendBtn = document.createElement('button');
+  sendBtn.textContent = '发送';
+  sendBtn.style.cssText = 'padding:6px 12px;border-radius:16px;border:none;background:rgba(200,160,100,0.3);color:#4A3728;font-size:12px;cursor:pointer;font-family:inherit;';
+  sendBtn.onclick = handleUserInput;
+  input.onkeydown = (e) => { if(e.key === 'Enter') handleUserInput(); };
+  inputBar.appendChild(input);
+  inputBar.appendChild(sendBtn);
+  widgetEl.appendChild(inputBar);
 
   // 收起态预览行
   const preview = document.createElement('div');
@@ -362,6 +378,37 @@ function startIdleTimer() {
 }
 
 /* ── 初始化 ── */
+
+/* ── 用户输入 ── */
+
+function handleUserInput() {
+  const input = document.getElementById('guide-input');
+  if (!input) return;
+  const txt = input.value.trim();
+  if (!txt) return;
+  input.value = '';
+  addMessage(txt, 'user');
+  const cd = charData();
+  const replies = cd.replies;
+  if (!replies) { addMessage('嗯。', 'char'); return; }
+
+  // 长关键词优先匹配
+  const keys = Object.keys(replies);
+  keys.sort((a,b) => b.length - a.length);
+  let matched = null;
+  for (const key of keys) {
+    if (txt.includes(key)) { matched = key; break; }
+  }
+  if (matched) {
+    setTimeout(() => addMessage(replies[matched], 'char'), 800);
+  } else {
+    const fallback = cd.idleTalks[Math.floor(Math.random() * cd.idleTalks.length)];
+    setTimeout(() => addMessage(fallback, 'char'), 800);
+  }
+  state.lastTalk = Date.now();
+  saveState();
+}
+
 
 function init() {
   if (typeof GUIDE_CHARS === 'undefined') {
