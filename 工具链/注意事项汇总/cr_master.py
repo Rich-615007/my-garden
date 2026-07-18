@@ -37,6 +37,7 @@ print("""
 │   ├── 音乐_add_music_tool.py    # 音乐: 网易云ID→网易云API→作品来源
 │   ├── 游戏_game-tool.py         # 游戏: 手动→制作公司
 │   ├── 向导_guide-tool.py        # 聊天向导验证
+│   ├── 游戏_steam_sync_tool.py    # Steam库同步游戏页
 │   └── 注意事项汇总/cr_master.py # ←本文件
 ├── js/
 │   ├── guide-characters.js       # 聊天向导: 3角色台词+关键词回复
@@ -181,7 +182,7 @@ UTF-8无BOM / LF换行 / open(file,'r',encoding='utf-8')
 print("""
 === 常用命令 ===
 # 全站自检
-for t in 追番_add_anime_tool 漫画_manga-tool 音乐_add_music_tool 向导_guide-tool 游戏_game-tool; do
+for t in 追番_add_anime_tool 漫画_manga-tool 音乐_add_music_tool 向导_guide-tool 游戏_game-tool 游戏_steam_sync_tool; do
   python3 "工具链/${t}.py" --check; done
 
 # 统计条目
